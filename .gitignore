@@ -1,0 +1,20 @@
+# Diretórios de build/compilação típicos
+bin/
+obj/
+
+# ---------------------------------------------------------------- #
+# Regras para VS Code (Ignorar)
+# ---------------------------------------------------------------- #
+# Ignora a pasta de configurações locais do VS Code
+.vscode/
+.git/
+
+# ---------------------------------------------------------------- #
+# Exceções (Certificar-se de que .graphs e src NÃO sejam ignoradas)
+# ---------------------------------------------------------------- #
+# As pastas .graphs/ e src/ JÁ SÃO rastreadas por padrão, a menos
+# que uma regra anterior as ignore explicitamente, o que não fizemos.
+# Apenas para garantir que NADA dentro delas seja ignorado por
+# regras genéricas (embora seja improvável neste caso, é bom saber):
+!src/
+!graphs/
