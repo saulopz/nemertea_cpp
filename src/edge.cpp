@@ -1,8 +1,7 @@
 #include "edge.h"
 #include "vertex.h"
 
-void Edge::SetState(State state)
-{
+void Edge::SetState(const State state) {
     if (!a_ || !b_)
         return;
     // First change active edge of its connected vertices

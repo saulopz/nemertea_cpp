@@ -1,10 +1,10 @@
 #include "nbfs.h"
 #include "node.h"
 
-NBFS::NBFS(Vertex *startVertex, bool first, size_t deepth)
+NBFS::NBFS(Vertex *startVertex, const bool first, const size_t depth)
     : leaves_(),
       first_(first),
-      deepth_(deepth)
+      depth_(depth)
 {
     root_ = new Node(startVertex);
     leaves_.push_back(root_);
@@ -14,9 +14,9 @@ size_t NBFS::Run()
 {
     size_t level = 0;
     std::vector<Node *> new_leaves;
-    while (!leaves_.empty() && level < deepth_)
+    while (!leaves_.empty() && level < depth_)
     {
-        for (const auto &leaf : leaves_)
+        for (const auto &leaf: leaves_)
         {
             Vertex *vertex = leaf->GetVertex();
             const size_t edge_count = vertex->GetEdgeCount();
@@ -36,7 +36,7 @@ size_t NBFS::Run()
     return 0;
 }
 
-std::pair<Node *, bool> NBFS::SelectChild(Node *node, Edge *edge, bool is_first)
+std::pair<Node *, bool> NBFS::SelectChild(Node *node, Edge *edge, const bool first) const
 {
     // Case 1: Edge already active - ignore
     if (edge->GetState() == State::ACTIVE)
@@ -45,7 +45,7 @@ std::pair<Node *, bool> NBFS::SelectChild(Node *node, Edge *edge, bool is_first)
     auto adjacent = node->GetVertex()->GetAdjacent(edge);
 
     // Case 2: Only in the first iteration can you visit vertices with TESTING state
-    if (!is_first && adjacent->GetState() == State::TESTING)
+    if (!first && adjacent->GetState() == State::TESTING)
         return {nullptr, false};
 
     // Case 3: Ignore returning to father
@@ -74,7 +74,7 @@ std::pair<Node *, bool> NBFS::SelectChild(Node *node, Edge *edge, bool is_first)
     return {node->AddChild(adjacent), false};
 }
 
-size_t NBFS::MakePath(Node *node)
+size_t NBFS::MakePath(const Node *node) const
 {
     // If there is an active connection to the root, disconnect to open a new path.
     if (node->GetVertex()->GetState() == State::ACTIVE)
@@ -101,7 +101,6 @@ size_t NBFS::MakePath(Node *node)
 
 NBFS::~NBFS()
 {
-    if (root_)
-        delete root_;
+    delete root_;
     leaves_.clear();
 }

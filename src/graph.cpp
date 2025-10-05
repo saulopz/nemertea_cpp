@@ -6,7 +6,7 @@
 
 using json = nlohmann::json;
 
-/** returns a vertex by it's id. It's used only for loadling opperation.
+/** returns a vertex by its id. It's used only for loading operation.
  * It is a O(n) operation.
  *
  * Parameters
@@ -17,7 +17,7 @@ using json = nlohmann::json;
  * -------
  * - Vertex*
  */
-Vertex *Graph::GetVertexById(uint64_t id)
+Vertex *Graph::GetVertexById(const uint64_t id) const
 {
     for (const auto &vertex : vertices_)
         if (vertex->GetId() == id)
@@ -40,7 +40,7 @@ void Graph::Load()
     }
     catch (json::parse_error &e)
     {
-        std::cerr << "Erro no parsing do JSON: " << e.what() << std::endl;
+        std::cerr << "Error parsing JSON: " << e.what() << std::endl;
         return;
     }
 
@@ -87,6 +87,10 @@ void Graph::Load()
             }
         }
     }
+    if (!vertices_.empty())
+    {
+        index_distribution_ = std::uniform_int_distribution<size_t>(0, vertices_.size() - 1);
+    }
 }
 
 void Graph::Save(bool solved)
@@ -94,15 +98,15 @@ void Graph::Save(bool solved)
     // Implement saving the graph to a dot file
     std::stringstream ss;
     ss << "// Graph name: " << filename_ << "\n";
-    ss << "// Algoirthm : Nemertea\n";
+    ss << "// Algorithm : Nemertea\n";
     ss << "// Run time  : \n";
     ss << "// Date      : \n";
     ss << "graph G {\n";
-    ss << "\tlayout=neato;\n";
-    ss << "\toverlap=false;\n";
-    ss << "\tsplines=true;\n";
+    ss << "\t layout=neato;\n";
+    ss << "\t overlap=false;\n";
+    ss << "\t splines=true;\n";
     if (!solved)
-        ss << "\tbgcolor=OldLace;\n";
+        ss << "\t bgcolor=OldLace;\n";
     ss << "\tnode [pin=true];\n";
     ss << "\tnode [shape=circle, width=1.0, height=1.0, fixedsize=true, style=filled, fillcolor=\"lightblue\"];\n\n";
 
@@ -141,7 +145,7 @@ void Graph::Save(bool solved)
     std::ofstream dot_file(filename_dot.replace_extension(".dot"));
     if (!dot_file.is_open())
     {
-        std::cerr << "Erro ao criar o arquivo "
+        std::cerr << "Error creating file "
                   << filename_dot.replace_extension(".dot")
                   << std::endl;
         return;

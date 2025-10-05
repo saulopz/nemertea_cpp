@@ -9,18 +9,21 @@
 class NBFS
 {
 private:
-    Node *root_;                 // Origin node (NBFS is owner)
+    Node *root_; // Origin node (NBFS is owner)
     std::vector<Node *> leaves_; // list of leaves
-    bool first_;                 // If is first interaction
-    size_t deepth_;              // Limit of deepth
+    bool first_; // If is first interaction
+    size_t depth_; // Limit of depth
 
     // Private methods
-    std::pair<Node *, bool> SelectChild(Node *node, Edge *edge, bool first);
-    size_t MakePath(Node *node);
+    std::pair<Node *, bool> SelectChild(Node *node, Edge *edge, bool first) const;
+
+    size_t MakePath(const Node *node) const;
 
 public:
-    NBFS(Vertex *startVertex, bool first, size_t deepth);
+    NBFS(Vertex *startVertex, bool first, size_t depth);
+
     size_t Run();
+
     ~NBFS();
 };
 

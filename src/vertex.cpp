@@ -2,8 +2,8 @@
 
 Vertex *Vertex::GetAdjacent(const Edge *edge) const
 {
-    auto a = edge->GetA();
-    auto b = edge->GetB();
+    const auto a = edge->GetA();
+    const auto b = edge->GetB();
     if (a->id_ == id_)
         return b;
     if (b->id_ == id_)
@@ -20,7 +20,7 @@ Edge *Vertex::GetEdgeTo(const Vertex *v) const
 {
     if (!v)
         return nullptr;
-    for (const auto &edge : edges_)
+    for (const auto &edge: edges_)
         if (edge->Contains(v))
             return edge;
     return nullptr;
@@ -31,7 +31,7 @@ bool Vertex::IsConnected(const Vertex *v) const
     return GetEdgeTo(v) ? true : false;
 }
 
-void Vertex::ChangeActiveEdge(State current_state, State new_state)
+void Vertex::ChangeActiveEdge(const State current_state, State new_state)
 {
     if (current_state != State::ACTIVE && new_state == State::ACTIVE)
     {

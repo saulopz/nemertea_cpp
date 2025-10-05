@@ -8,6 +8,7 @@ obj/
 # Ignora a pasta de configurações locais do VS Code
 .vscode/
 .git/
+.idea/
 
 # ---------------------------------------------------------------- #
 # Exceções (Certificar-se de que .graphs e src NÃO sejam ignoradas)

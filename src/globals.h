@@ -3,12 +3,7 @@
 
 #include <string>
 
-enum class State
-{
-    NONE = 0,
-    TESTING = 1,
-    ACTIVE = 2
-};
+enum class State { NONE = 0, TESTING = 1, ACTIVE = 2 };
 
 std::string stateToString(State state);
 
