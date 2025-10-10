@@ -1,16 +1,27 @@
 #include "nemertea.h"
 #include "nbfs.h"
 
-size_t Nemertea(Graph *graph, const size_t depth)
+std::pair<size_t, Vertex *> FirstPath(Vertex *root);
+
+size_t Nemertea(Graph *graph, const size_t depth, const bool cycle)
 {
     Vertex *prev = nullptr;                             // Previous vertex, starts null
     const auto vertex_count = graph->GetVertexCount();  // Number of vertices in the graph
-    const auto first_vertex = graph->GetRandomVertex(); // Take a random vertex
+    auto first_vertex = graph->GetRandomVertex();       // Take a random vertex
     const auto first_vertex_id = first_vertex->GetId(); // Get its id
     first_vertex->SetState(State::ACTIVE);              // The first vertex is ACTIVE
     auto current = first_vertex;                        // Navigation vertex
     size_t path_count = 1;                              // The first vertex is already on the path
-    bool first = true;                                  // First region is being created
+    bool first = true;
+
+    if (!cycle)
+    {
+        auto [count, f] = FirstPath(first_vertex);
+        first_vertex = f;
+        current = first_vertex;
+        path_count += count;
+        first = false;
+    }
 
     do
     {
@@ -26,8 +37,7 @@ size_t Nemertea(Graph *graph, const size_t depth)
         const auto next = NextVertex(prev, current);
         prev = current;
         current = next;
-    } while (current && current->GetId() != first_vertex_id &&
-             path_count < vertex_count);
+    } while (current && current->GetId() != first_vertex_id && path_count < vertex_count);
 
     // If the current id is equal to the first vertex id, return to the starting vertex - finish
     // if pathCount is equal to vertexCount, all vertices are active - finish
@@ -50,4 +60,35 @@ Vertex *NextVertex(const Vertex *prev, const Vertex *current)
         }
     }
     return nullptr;
+}
+
+std::pair<size_t, Vertex *> FirstPath(Vertex *root)
+{
+    size_t count = 0;
+    auto p = root;
+    bool found = false;
+    do
+    {
+        found = false;
+        size_t edge_count = p->GetEdgeCount();
+        size_t i = 0;
+        while (i < edge_count && !found)
+        {
+            auto edge = p->GetEdge(i);
+            if (edge->GetState() == State::NONE)
+            {
+                auto adjacent = p->GetAdjacent(edge);
+                if (adjacent->GetState() == State::NONE)
+                {
+                    edge->SetState(State::ACTIVE);
+                    adjacent->SetState(State::ACTIVE);
+                    count++;
+                    p = adjacent;
+                    found = true;
+                }
+            }
+            i++;
+        }
+    } while (found);
+    return {count, p};
 }
