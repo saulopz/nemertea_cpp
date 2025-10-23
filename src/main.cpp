@@ -1,59 +1,54 @@
-/**
- * @file main.cpp
- * @brief Ponto de entrada principal para a aplicação de Gestão de Estoque.
- *
- * Nemertea: Algoritmo Heurístico de Exploração Adaptativa para o Problema do
- * Ciclo Hamiltoniano (PCH).
- * * OBJETIVO:
- * Encontrar um Ciclo Hamiltoniano (um caminho que visita todos os vértices exatamente uma vez,
- * retornando ao ponto de partida) em um grafo finito, não direcionado e geral.
- * * ESTRATÉGIA CENTRAL: Conquista Territorial
- * O algoritmo opera sob uma estratégia de 'conquista territorial'. Começando em um vértice
- * aleatório, ele expande progressivamente seu 'território' (Fronteira F) até que todos os
- * vértices sejam incluídos no caminho.
- * * MECANISMOS-CHAVE:
- * * 1. ESTADOS DINÂMICOS:
- * - O algoritmo utiliza estados internos (INACTIVE=0, TESTING=1, ACTIVE=2) em vértices e
- * arestas para guiar a navegação e evitar a exploração de elementos já conquistados (ACTIVE).
- * * 2. NBFS (Nemertea Best First Search):
- * - O NBFS é uma Busca em Largura (BFS) customizada, utilizada como motor de expansão.
- * - Ela busca o caminho mais curto para estender a Fronteira a partir do vértice ativo corrente.
- * - Usa um predicado estrito (SELECTCHILD) para filtrar caminhos, evitando retrocessos e a
- * formação prematura de ciclos.
- * * 3. ANÁLISE AMORTIZADA:
- * - Embora o NBFS possa ser chamado múltiplas vezes, a conquista permanente de vértices
- * (estado ACTIVE) garante que o espaço de busca diminua progressivamente.
- * - A complexidade é amortizada na prática para O(|V| + |E|), conferindo alta eficiência e
- * escalabilidade para grafos grandes, o principal diferencial do Nemertea.
- * * RETORNO:
- * TRUE se um Ciclo Hamiltoniano for encontrado (total de vértices conquistados = |V|) ou FALSE
- * caso contrário.
- *
- * @author Saulo Popov Zambiasi
- * @date 2025-10-09
- *
- * @section Dependencias
- * Requer a biblioteca 'Produto' para manipulação de itens e 'Estoque'
- * para operações de banco de dados.
- */
+// -*- coding: utf-8 -*-
+// vertex.h
+//
+// Nemertea: A Territorial Expansion-Based Algorithm for the Hamiltonian
+// Cycle Problem
+//
+// © 2025 Saulo Popov Zambiasi. All rights reserved.
+// Registered at INPI (Brazil).
+// Contact: saulopz@gmail.com
+//
+// This file is part of the Nemertea source code,
+// implementing the Vertex class used in the NBFS algorithm.
+//
+// Description:
+//
+// Nemertea is an algorithm for solving the Hamiltonian cycle problem in
+// graphs. It is a heuristic algorithm that uses territorial conquest as
+// a strategy. The algorithm starts in a random closed region and adds
+// new closed regions  * until all vertices are part of the boundaries of
+// that territory. To add new regions, a vertex v is taken from the
+// frontier and follows paths and external vertices of the frontier until
+// it finds a vertex u that is a neighbor of v and is on the frontier,
+// with no other vertices between them. The path taken from v to u through
+// the external area is added as a new frontier and the boundary that was
+// between v and u is undone. In this way, a new area is added to the
+// territory. To find this new region, the algorithm uses a custom Breadth
+// First Search.
 
-#include <iostream>
-#include <chrono>
-#include <cxxopts.hpp>
 #include "graph.h"
 #include "nemertea.h"
+#include <chrono>
+#include <cxxopts.hpp>
+#include <iostream>
 
 int main(const int argc, char *argv[])
 {
     // Parameters inicialization
 
-    cxxopts::Options options("nemertea", "Nemertea: A Territorial Expansion-Based Algorithm for the Hamiltonian Cycle Problem");
+    cxxopts::Options options("nemertea",
+                             "Nemertea: A Territorial Expansion-Based Algorithm for the Hamiltonian Cycle Problem");
 
+    // clang-format off
     options.add_options()
-        ("g,graph", "Graph file (.json)", cxxopts::value<std::string>()->default_value(""))
-        ("d,depth", "Max depht (between 3 and 20, default 5)", cxxopts::value<int>()->default_value("5"))
-        ("t,type", "Operation type (cycle, path. Default: cycle)", cxxopts::value<std::string>()->default_value("cycle"))
+        ("g,graph", "Graph file (.json)",
+            cxxopts::value<std::string>()->default_value(""))
+        ("d,depth", "Max depht (between 3 and 20, default 5)",
+            cxxopts::value<int>()->default_value("5"))
+        ("t,type", "Operation type (cycle, path. Default: cycle)",
+            cxxopts::value<std::string>()->default_value("cycle"))
         ("h,help", "Show this help message");
+    // clang-format on
 
     std::string fname = "";
     size_t max_depth = 5;
@@ -82,7 +77,8 @@ int main(const int argc, char *argv[])
 
     if (fname == "")
     {
-        std::cout << "You need enter with a graph file.\n" << std::endl;
+        std::cout << "You need enter with a graph file.\n"
+                  << std::endl;
         std::cout << options.help() << "\n";
         return 1;
     }
@@ -97,15 +93,13 @@ int main(const int argc, char *argv[])
 
     const size_t path_count = Nemertea(graph, max_depth, type == "cycle");
 
-    const auto duracao = std::chrono::duration_cast<std::chrono::microseconds>(
-        std::chrono::high_resolution_clock::now() - inicial);
-
+    const auto duracao =
+        std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - inicial);
 
     // Printing results
 
-    std::cout << "Nemertea execution " << duracao.count()
-              << " microseconds. Found " << path_count
-              << " of " << vertex_count << " vertices =>";
+    std::cout << "Nemertea execution " << duracao.count() << " microseconds. Found " << path_count << " of "
+              << vertex_count << " vertices =>";
 
     const bool solved = path_count == vertex_count;
     if (solved)

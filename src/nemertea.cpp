@@ -1,7 +1,7 @@
 #include "nemertea.h"
 #include "nbfs.h"
 
-std::pair<size_t, Vertex *> FirstPath(Vertex *root);
+size_t FirstPath(Vertex *root);
 
 size_t Nemertea(Graph *graph, const size_t depth, const bool cycle)
 {
@@ -14,12 +14,10 @@ size_t Nemertea(Graph *graph, const size_t depth, const bool cycle)
     size_t path_count = 1;                              // The first vertex is already on the path
     bool first = true;
 
+    // If is a path resolution. Create a first line and then start Nemertea in the root point
     if (!cycle)
     {
-        auto [count, f] = FirstPath(first_vertex);
-        first_vertex = f;
-        current = first_vertex;
-        path_count += count;
+        path_count += FirstPath(first_vertex);
         first = false;
     }
 
@@ -62,7 +60,7 @@ Vertex *NextVertex(const Vertex *prev, const Vertex *current)
     return nullptr;
 }
 
-std::pair<size_t, Vertex *> FirstPath(Vertex *root)
+size_t FirstPath(Vertex *root)
 {
     size_t count = 0;
     auto p = root;
@@ -90,5 +88,5 @@ std::pair<size_t, Vertex *> FirstPath(Vertex *root)
             i++;
         }
     } while (found);
-    return {count, p};
+    return count;
 }

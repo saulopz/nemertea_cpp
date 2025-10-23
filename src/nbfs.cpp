@@ -1,10 +1,21 @@
+// -*- coding: utf-8 -*-
+// nbfs.cpp
+//
+// Nemertea: A Territorial Expansion-Based Algorithm
+// for the Hamiltonian Cycle Problem
+//
+// © 2025 Saulo Popov Zambiasi. All rights reserved.
+// Registered at INPI (Brazil).
+// Contact: saulopz@gmail.com
+//
+// This file is part of the Nemertea source code,
+// implementing the Vertex class used in the NBFS algorithm.
+//
+
 #include "nbfs.h"
 #include "node.h"
 
-NBFS::NBFS(Vertex *startVertex, const bool first, const size_t depth)
-    : leaves_(),
-      first_(first),
-      depth_(depth)
+NBFS::NBFS(Vertex *startVertex, const bool first, const size_t depth) : leaves_(), first_(first), depth_(depth)
 {
     root_ = new Node(startVertex);
     leaves_.push_back(root_);
@@ -16,7 +27,7 @@ size_t NBFS::Run()
     std::vector<Node *> new_leaves;
     while (!leaves_.empty() && level < depth_)
     {
-        for (const auto &leaf: leaves_)
+        for (const auto &leaf : leaves_)
         {
             Vertex *vertex = leaf->GetVertex();
             const size_t edge_count = vertex->GetEdgeCount();
@@ -55,8 +66,7 @@ std::pair<Node *, bool> NBFS::SelectChild(Node *node, Edge *edge, const bool fir
 
     // Case 4: If it is root with no active connections yet
     Vertex *root_vertex = root_->GetVertex();
-    if (adjacent->GetId() == root_vertex->GetId() &&
-        root_vertex->GetActiveEdgeCount() == 0)
+    if (adjacent->GetId() == root_vertex->GetId() && root_vertex->GetActiveEdgeCount() == 0)
         return {node->AddChild(adjacent), true};
 
     // Case 5 and 6: If vertex is active and is neighbor of root, path found or ignored
@@ -76,7 +86,7 @@ std::pair<Node *, bool> NBFS::SelectChild(Node *node, Edge *edge, const bool fir
 
 size_t NBFS::MakePath(const Node *node) const
 {
-    // If there is an active connection to the root, disconnect to open a new path.
+    // If there is an active connection to the root, disconnect to open a new region.
     if (node->GetVertex()->GetState() == State::ACTIVE)
     {
         auto edge = root_->GetVertex()->GetEdgeTo(node->GetVertex());

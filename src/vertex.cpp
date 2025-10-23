@@ -1,3 +1,17 @@
+// -*- coding: utf-8 -*-
+// vertex.cpp
+//
+// Nemertea: A Territorial Expansion-Based Algorithm
+// for the Hamiltonian Cycle Problem
+//
+// © 2025 Saulo Popov Zambiasi. All rights reserved.
+// Registered at INPI (Brazil).
+// Contact: saulopz@gmail.com
+//
+// This file is part of the Nemertea source code,
+// implementing the Vertex class used in the NBFS algorithm.
+//
+
 #include "vertex.h"
 
 Vertex *Vertex::GetAdjacent(const Edge *edge) const
@@ -20,7 +34,7 @@ Edge *Vertex::GetEdgeTo(const Vertex *v) const
 {
     if (!v)
         return nullptr;
-    for (const auto &edge: edges_)
+    for (const auto &edge : edges_)
         if (edge->Contains(v))
             return edge;
     return nullptr;

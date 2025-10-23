@@ -1,22 +1,25 @@
+// -*- coding: utf-8 -*-
+// graph.cpp
+//
+// Nemertea: A Territorial Expansion-Based Algorithm
+// for the Hamiltonian Cycle Problem
+//
+// © 2025 Saulo Popov Zambiasi. All rights reserved.
+// Registered at INPI (Brazil).
+// Contact: saulopz@gmail.com
+//
+// This file is part of the Nemertea source code,
+// implementing the Vertex class used in the NBFS algorithm.
+//
+
 #include "graph.h"
-#include <nlohmann/json.hpp>
-#include <iostream>
-#include <fstream>
 #include <filesystem>
+#include <fstream>
+#include <iostream>
+#include <nlohmann/json.hpp>
 
 using json = nlohmann::json;
 
-/** returns a vertex by its id. It's used only for loading operation.
- * It is a O(n) operation.
- *
- * Parameters
- * ----------
- * - id (uint64_t): vertex id to find it.
- *
- * Returns
- * -------
- * - Vertex*
- */
 Vertex *Graph::GetVertexById(const uint64_t id) const
 {
     for (const auto &vertex : vertices_)
@@ -49,8 +52,7 @@ void Graph::Load()
     {
         for (const auto &v : data["vertex"])
         {
-            if (v.contains("id") && v.contains("name") &&
-                v.contains("x") && v.contains("y"))
+            if (v.contains("id") && v.contains("name") && v.contains("x") && v.contains("y"))
             {
                 uint64_t id = v["id"];
                 std::string name = v["name"];
@@ -66,8 +68,7 @@ void Graph::Load()
     {
         for (const auto &e : data["edge"])
         {
-            if (e.contains("id") && e.contains("a") &&
-                e.contains("b") && e.contains("weight"))
+            if (e.contains("id") && e.contains("a") && e.contains("b") && e.contains("weight"))
             {
                 uint64_t id = e["id"];
                 uint64_t a_id = e["a"];
@@ -145,9 +146,7 @@ void Graph::Save(bool solved)
     std::ofstream dot_file(filename_dot.replace_extension(".dot"));
     if (!dot_file.is_open())
     {
-        std::cerr << "Error creating file "
-                  << filename_dot.replace_extension(".dot")
-                  << std::endl;
+        std::cerr << "Error creating file " << filename_dot.replace_extension(".dot") << std::endl;
         return;
     }
     dot_file << dot_content;
