@@ -1,3 +1,17 @@
+// -*- coding: utf-8 -*-
+// nemertea.cpp
+//
+// Nemertea: A Territorial Expansion-Based Algorithm
+// for the Hamiltonian Cycle Problem
+//
+// © 2025 Saulo Popov Zambiasi. All rights reserved.
+// Registered at INPI (Brazil).
+// Contact: saulopz@gmail.com
+//
+// This file is part of the Nemertea source code,
+// implementing the Vertex class used in the NBFS algorithm.
+//
+
 #include "nemertea.h"
 #include "nbfs.h"
 
