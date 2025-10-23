@@ -55,6 +55,10 @@ bin/nemertea --graph graphs/my_graph.json --depth 7
 
 Adjust parameters as needed.
 
+# Graph Results
+
+- The algotithm outputs whether a Hamiltonian cycle was found and the cycle itself if successful in dot format (graphviz) with same name as input file but with `.dot` extension.
+
 ## Debug tips
 - If you get "no input files", ensure `src/` contains `.cpp` files.
 - If compilation fails due to `nlohmann/json.hpp`, either install the system package or place the full `single_include/nlohmann` directory under `src/`.
