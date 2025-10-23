@@ -5,6 +5,7 @@
 // Cycle Problem
 //
 // © 2025 Saulo Popov Zambiasi. All rights reserved.
+// Since 10/10/2021.
 // Registered at INPI (Brazil).
 // Contact: saulopz@gmail.com
 //
