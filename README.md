@@ -4,10 +4,6 @@ Nemertea is a C++ implementation of a territorial-expansion algorithm to tackle 
 
 ![Dodecahedron Graph with Hamiltonian Cycle](images/dodecahedron.png)
 
-# Images
-
-- [images/dodecahedron.png](images/dodecahedron.png): Dodecahedron graph with Hamiltonian cycle highlighted.
-
 ## Features
 - Territorial expansion strategy to find Hamiltonian cycles.
 - Command-line interface for execution and configuration.
