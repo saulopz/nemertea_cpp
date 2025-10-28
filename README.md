@@ -2,6 +2,10 @@
 
 Nemertea is a C++ implementation of a territorial-expansion algorithm to tackle the Hamiltonian Cycle Problem (HCP).
 
+<div align="center">
+  <img src="images/dodecahedron.png" alt="Dodecahedron" width="400">
+</div>
+
 ## Features
 - Territorial expansion strategy to find Hamiltonian cycles.
 - Command-line interface for execution and configuration.
@@ -58,6 +62,10 @@ Adjust parameters as needed.
 # Graph Results
 
 - The algotithm outputs whether a Hamiltonian cycle was found and the cycle itself if successful in dot format (graphviz) with same name as input file but with `.dot` extension.
+
+<div align="center">
+  <img src="images/big_random.png" alt="Big Random Graph" width="700">
+</div>
 
 ## Debug tips
 - If you get "no input files", ensure `src/` contains `.cpp` files.
