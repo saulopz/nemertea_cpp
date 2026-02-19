@@ -1,0 +1,19 @@
+// Graph name: graphs/triangle.json
+// Algorithm : Nemertea
+// Run time  : 
+// Date      : 
+graph G {
+	 layout=neato;
+	 overlap=false;
+	 splines=true;
+	node [pin=true];
+	node [shape=circle, width=1.0, height=1.0, fixedsize=true, style=filled, fillcolor="lightblue"];
+
+	V1 [label="", style=filled, pos="24.6,37!", fillcolor="black", color="black"];
+	V2 [label="", style=filled, pos="50.9,36.8!", fillcolor="black", color="black"];
+	V3 [label="", style=filled, pos="38.2,20.2!", fillcolor="black", color="black"];
+
+	V2 -- V3 [color="black", penwidth=50.0];
+	V1 -- V3 [color="black", penwidth=50.0];
+	V2 -- V1 [color="black", penwidth=50.0];
+}

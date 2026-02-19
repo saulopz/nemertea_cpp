@@ -19,6 +19,7 @@
 #include "vertex.h"
 #include <memory>
 #include <utility>
+#include <queue>
 
 /**
  * Class that implements the Nemertea BFS (NBFS) algorithm.
@@ -35,9 +36,9 @@
  */
 class NBFS
 {
-private:
+  private:
     Node *root_;                 // Origin node (NBFS is owner)
-    std::vector<Node *> leaves_; // list of leaves
+    std::queue<Node *> leaves_; // list of leaves
     bool first_;                 // If is first interaction
     size_t depth_;               // Limit of depth
 
@@ -62,7 +63,7 @@ private:
      */
     size_t MakePath(const Node *node) const;
 
-public:
+  public:
     /**
      * @brief Constructor for the NBFS class.
      *

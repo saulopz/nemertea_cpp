@@ -22,7 +22,7 @@
  *
  * Each node contains a vertex, a pointer to its parent node, the edge connecting
  * it to its parent, and a list of its children nodes.
- * 
+ *
  * Attributes
  * ----------
  * - vertex_: Pointer to the vertex associated with this node.
@@ -32,13 +32,13 @@
  */
 class Node
 {
-private:
+  private:
     Vertex *vertex_;               // Vertex of Node
     Node *parent_;                 // Node parent
     Edge *edge_;                   // Edge to parent
     std::vector<Node *> children_; // List of children
 
-public:
+  public:
     /**
      * @brief Node constructor
      *

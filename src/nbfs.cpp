@@ -18,19 +18,26 @@
 NBFS::NBFS(Vertex *startVertex, const bool first, const size_t depth) : leaves_(), first_(first), depth_(depth)
 {
     root_ = new Node(startVertex);
-    leaves_.push_back(root_);
+    leaves_.push(root_);
 }
 
 size_t NBFS::Run()
 {
     size_t level = 0;
-    std::vector<Node *> new_leaves;
     while (!leaves_.empty() && level < depth_)
     {
-        for (const auto &leaf : leaves_)
+        // It retrieves the number of nodes at that level
+        // so we know when we are changing levels.
+        size_t nodes_at_this_level = leaves_.size();
+
+        for (size_t i = 0; i < nodes_at_this_level; i++)
         {
+            Node* leaf = leaves_.front();
+            leaves_.pop();
+
             Vertex *vertex = leaf->GetVertex();
             const size_t edge_count = vertex->GetEdgeCount();
+
             for (size_t i = 0; i < edge_count; i++)
             {
                 Edge *edge = vertex->GetEdge(i);
@@ -38,10 +45,9 @@ size_t NBFS::Run()
                 if (found)
                     return MakePath(child);
                 else if (child)
-                    new_leaves.push_back(child);
+                    leaves_.push(child);
             }
         }
-        leaves_ = std::move(new_leaves);
         level++;
     }
     return 0;
@@ -112,5 +118,4 @@ size_t NBFS::MakePath(const Node *node) const
 NBFS::~NBFS()
 {
     delete root_;
-    leaves_.clear();
 }
