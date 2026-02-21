@@ -28,5 +28,6 @@ $(TARGET): $(OBJS)
 
 clean:
 	rm -rf $(OBJ_DIR) $(BIN_DIR)
+	rm -f graphs/*.dot
 
 .PHONY: all clean

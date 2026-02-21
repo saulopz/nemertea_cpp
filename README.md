@@ -73,5 +73,6 @@ Adjust parameters as needed.
 - Always check pointers returned by functions (`nullptr`) before dereferencing.
 
 ## License & Contact
-© 2025 Saulo Popov Zambiasi — Contact: saulopz@gmail.com
+© 2021-2026 Saulo Popov Zambiasi — All Rights Reserved (Pending Open Source Release post-publication).
 
+**Contact:** saulopz@gmail.com

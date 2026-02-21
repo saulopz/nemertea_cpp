@@ -32,16 +32,16 @@ size_t NBFS::Run()
 
         for (size_t i = 0; i < nodes_at_this_level; i++)
         {
-            Node* leaf = leaves_.front();
+            Node *node = leaves_.front();
             leaves_.pop();
 
-            Vertex *vertex = leaf->GetVertex();
+            Vertex *vertex = node->GetVertex();
             const size_t edge_count = vertex->GetEdgeCount();
 
             for (size_t i = 0; i < edge_count; i++)
             {
                 Edge *edge = vertex->GetEdge(i);
-                auto [child, found] = SelectChild(leaf, edge, first_);
+                auto [child, found] = SelectChild(node, edge, first_);
                 if (found)
                     return MakePath(child);
                 else if (child)
