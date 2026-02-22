@@ -4,7 +4,7 @@
 // Nemertea: A Territorial Expansion-Based Algorithm
 // for the Hamiltonian Cycle Problem
 //
-// © 2025 Saulo Popov Zambiasi. All rights reserved.
+// © 2021-Present Saulo Popov Zambiasi. All rights reserved.
 // Registered at INPI (Brazil).
 // Contact: saulopz@gmail.com
 //

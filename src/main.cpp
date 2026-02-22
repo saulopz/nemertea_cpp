@@ -4,7 +4,7 @@
 // Nemertea: A Territorial Expansion-Based Algorithm for the Hamiltonian
 // Cycle Problem
 //
-// © 2025 Saulo Popov Zambiasi. All rights reserved.
+// © 2021-Present Saulo Popov Zambiasi. All rights reserved.
 // Since 10/10/2021.
 // Registered at INPI (Brazil).
 // Contact: saulopz@gmail.com
@@ -35,21 +35,21 @@
 
 int main(const int argc, char *argv[])
 {
-    // Parameters inicialization
+    // Parameters inicialization ---------------------------------------
 
-    cxxopts::Options options("nemertea",
-                             "Nemertea: A Territorial Expansion-Based Algorithm for the Hamiltonian Cycle Problem");
+    cxxopts::Options options(                                //
+        "nemertea",                                          //
+        "Nemertea: A Territorial Expansion-Based Algorithm " //
+        "for the Hamiltonian Cycle Problem");
 
-    // clang-format off
-    options.add_options()
-        ("g,graph", "Graph file (.json)",
-            cxxopts::value<std::string>()->default_value(""))
-        ("d,depth", "Max depht (between 3 and 20, default 5)",
-            cxxopts::value<int>()->default_value("5"))
-        ("t,type", "Operation type (cycle, path. Default: cycle)",
-            cxxopts::value<std::string>()->default_value("cycle"))
+    options.add_options()                                          //
+        ("g,graph", "Graph file (.json)",                          //
+         cxxopts::value<std::string>()->default_value(""))         //
+        ("d,depth", "Max depht (between 3 and 20, default 5)",     //
+         cxxopts::value<int>()->default_value("5"))                //
+        ("t,type", "Operation type (cycle, path. Default: cycle)", //
+         cxxopts::value<std::string>()->default_value("cycle"))    //
         ("h,help", "Show this help message");
-    // clang-format on
 
     std::string fname = "";
     size_t max_depth = 5;
@@ -71,36 +71,41 @@ int main(const int argc, char *argv[])
     }
     catch (const std::exception &e)
     {
-        std::cerr << "Erro ao interpretar parâmetros: " << e.what() << "\n";
-        std::cerr << "Use --help para ver as opções disponíveis.\n";
+        std::cerr << "Error interpreting parameters.: " << e.what() << "\n";
+        std::cerr << "Use --help to see the available options..\n";
         return 1;
     }
 
     if (fname == "")
     {
-        std::cout << "You need enter with a graph file.\n"
-                  << std::endl;
+        std::cout << "You need enter with a graph file.\n" << std::endl;
         std::cout << options.help() << "\n";
         return 1;
     }
 
-    // Execution program
+    // Running program -------------------------------------------
 
     const auto graph = new Graph(fname);
     graph->Load();
     const size_t vertex_count = graph->GetVertexCount();
 
-    const auto inicial = std::chrono::high_resolution_clock::now();
+    using std::chrono::duration_cast;
+    using std::chrono::high_resolution_clock;
+    using std::chrono::microseconds;
+
+    const auto initial = high_resolution_clock::now();
 
     const size_t path_count = Nemertea(graph, max_depth, type == "cycle");
 
-    const auto duracao =
-        std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - inicial);
+    const auto duration = duration_cast<microseconds>( //
+        high_resolution_clock::now() - initial         //
+    );
 
-    // Printing results
+    // Printing results --------------------------------------------
 
-    std::cout << "Nemertea execution " << duracao.count() << " microseconds. Found " << path_count << " of "
-              << vertex_count << " vertices =>";
+    std::cout << "Nemertea execution " << duration.count() //
+              << " microseconds. Found " << path_count     //
+              << " of " << vertex_count << " vertices =>";
 
     const bool solved = path_count == vertex_count;
     if (solved)
