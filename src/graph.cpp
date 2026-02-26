@@ -103,11 +103,11 @@ void Graph::Save(bool solved)
     ss << "// Run time  : \n";
     ss << "// Date      : \n";
     ss << "graph G {\n";
-    ss << "\t layout=neato;\n";
-    ss << "\t overlap=false;\n";
-    ss << "\t splines=true;\n";
+    ss << "\tlayout=neato;\n";
+    ss << "\toverlap=false;\n";
+    ss << "\tsplines=true;\n";
     if (!solved)
-        ss << "\t bgcolor=OldLace;\n";
+        ss << "\tbgcolor=OldLace;\n";
     ss << "\tnode [pin=true];\n";
     ss << "\tnode [shape=circle, width=1.0, height=1.0, fixedsize=true, style=filled, fillcolor=\"lightblue\"];\n\n";
 

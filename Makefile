@@ -10,9 +10,13 @@ OBJS := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRCS))
 # Nome do executável
 TARGET := $(BIN_DIR)/nemertea
 
-# Compilador e flags
-CXX := g++
-CXXFLAGS := -Wall -O2 -std=c++23 -Isrc
+# Compilador e flags GCC
+# CXX := g++
+# CXXFLAGS := -Wall -O2 -std=c++23 -Isrc
+
+# Compilador e flags CLANG
+CXXFLAGS := -Wall -Wextra -Wpedantic -Wconversion -O2 -std=c++23 -Isrc
+CXX := clang++
 
 # Regras
 all: $(BIN_DIR) $(OBJ_DIR) $(TARGET)

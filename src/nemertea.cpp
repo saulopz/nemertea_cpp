@@ -38,17 +38,20 @@ size_t Nemertea(Graph *graph, const size_t depth, const bool cycle)
     do
     {
         size_t size = 0;
+        
         do
         {
             auto nbfs = NBFS(current, first, depth);
             size = nbfs.Run();
             path_count += size;
             first = false;
+            
         } while (size > 0);
 
         const auto next = NextVertex(prev, current);
         prev = current;
         current = next;
+
     } while (current && current->GetId() != first_vertex_id && path_count < vertex_count);
 
     // If the current id is equal to the first vertex id, return to the starting vertex - finish

@@ -27,6 +27,24 @@
 // territory. To find this new region, the algorithm uses a custom Breadth
 // First Search.
 
+/**
+ * @section Performance and Memory Architecture
+ * * The Nemertea algorithm utilizes raw pointers for graph traversal and 
+ * vertex manipulation. This design choice is deliberate and aims to:
+ * * 1. Minimize Overhead: Avoiding the reference counting of std::shared_ptr 
+ * or the movement semantics of std::unique_ptr within the "hot path" of 
+ * the custom Breadth-First Search (NBFS), where performance is critical.
+ * * 2. Ownership Separation: The Graph object (see graph.h) maintains total 
+ * ownership (RAII) of all vertices and edges. The Nemertea function 
+ * acts solely as a consumer/visitor. Since the graph structure remains 
+ * immutable throughout the expansion process, raw pointers provide the 
+ * most efficient access pattern without risking memory leaks or 
+ * dangling pointers.
+ * * 3. Cache Friendliness: Direct pointer dereferencing facilitates compiler 
+ * optimizations and aligns with the high-performance requirements of 
+ * solving NP-complete problems like the Hamiltonian Cycle.
+ */
+
 #include "graph.h"
 #include "nemertea.h"
 #include <chrono>
@@ -45,7 +63,7 @@ int main(const int argc, char *argv[])
     options.add_options()                                          //
         ("g,graph", "Graph file (.json)",                          //
          cxxopts::value<std::string>()->default_value(""))         //
-        ("d,depth", "Max depht (between 3 and 20, default 5)",     //
+        ("d,depth", "Max depth (between 3 and 20, default 5)",     //
          cxxopts::value<int>()->default_value("5"))                //
         ("t,type", "Operation type (cycle, path. Default: cycle)", //
          cxxopts::value<std::string>()->default_value("cycle"))    //
@@ -66,13 +84,13 @@ int main(const int argc, char *argv[])
         }
 
         fname = result["graph"].as<std::string>();
-        max_depth = result["depth"].as<int>();
+        max_depth = static_cast<size_t>(result["depth"].as<int>());
         type = result["type"].as<std::string>();
     }
     catch (const std::exception &e)
     {
-        std::cerr << "Error interpreting parameters.: " << e.what() << "\n";
-        std::cerr << "Use --help to see the available options..\n";
+        std::cerr << "Error interpreting parameters: " << e.what() << "\n";
+        std::cerr << "Use --help to see the available options.\n";
         return 1;
     }
 
@@ -85,7 +103,7 @@ int main(const int argc, char *argv[])
 
     // Running program -------------------------------------------
 
-    const auto graph = new Graph(fname);
+    auto graph = std::make_unique<Graph>(fname);
     graph->Load();
     const size_t vertex_count = graph->GetVertexCount();
 
@@ -95,7 +113,7 @@ int main(const int argc, char *argv[])
 
     const auto initial = high_resolution_clock::now();
 
-    const size_t path_count = Nemertea(graph, max_depth, type == "cycle");
+    const size_t path_count = Nemertea(graph.get(), max_depth, type == "cycle");
 
     const auto duration = duration_cast<microseconds>( //
         high_resolution_clock::now() - initial         //
@@ -115,6 +133,5 @@ int main(const int argc, char *argv[])
 
     graph->Save(solved);
 
-    delete graph;
     return 0;
 }
