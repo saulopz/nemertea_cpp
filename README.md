@@ -16,6 +16,7 @@ Nemertea is a C++ implementation of a territorial-expansion algorithm to tackle 
   - Install on Debian/Ubuntu: `sudo apt install nlohmann-json3-dev`
   - Or download `single_include/nlohmann` and place it in `src/` (Makefile uses `-Isrc`)
 
+
 ## Input JSON format
 Example (valid JSON — no trailing commas):
 
