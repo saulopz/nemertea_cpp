@@ -9,14 +9,6 @@ Nemertea is a C++ implementation of a territorial-expansion algorithm to tackle 
 - Command-line interface for execution and configuration.
 - Accepts input graphs in JSON format.
 
-## Requirements
-- C++ compiler with C++23 support (g++ >= 11 recommended)
-- make
-- nlohmann/json (header-only)
-  - Install on Debian/Ubuntu: `sudo apt install nlohmann-json3-dev`
-  - Or download `single_include/nlohmann` and place it in `src/` (Makefile uses `-Isrc`)
-
-
 ## Input JSON format
 Example (valid JSON — no trailing commas):
 
@@ -38,40 +30,69 @@ Fields:
 - `vertex`: list of vertices with `name`, `id`, `x`, `y`.
 - `edge`: list of edges with `id`, `a`, `b`, `weight` (`a` and `b` are vertex ids).
 
+## Requirements
+
+| Tool   | Version   | Notes                                      |
+|--------|-----------|--------------------------------------------|
+| CMake  | ≥ 3.21    | [cmake.org/download](https://cmake.org/download) |
+| C++ compiler | C++23 support | g++ ≥ 11, clang++ ≥ 14, or MSVC 2022 |
+| Git    | any       | Required for dependency download           |
+| Internet access | — | Only on first build (downloads nlohmann/json automatically) |
+
+> **nlohmann/json** is fetched automatically during the build. No manual installation required.
+
+
 ## Build
-From project root:
+
+### Linux / macOS
 
 ```bash
-make
+cmake -B build
+cmake --build build
 ```
 
-Executable: `bin/nemertea`
+Executable: `build/nemertea`
 
-To enable debug symbols (helpful for segfaults), edit `Makefile` and replace `-O2` with `-g` in `CXXFLAGS`.
-
-## Run
-Example:
+### Windows (MSVC — Visual Studio 2022)
 
 ```bash
-bin/nemertea --graph graphs/my_graph.json --depth 7
+cmake -B build
+cmake --build build --config Release
+```
+
+Executable: `build\Release\nemertea.exe`
+
+### Windows (MinGW / MSYS2)
+
+```bash
+cmake -B build -G "MinGW Makefiles"
+cmake --build build
+```
+
+---
+
+### Debug build (for segfault investigation)
+
+```bash
+cmake -B build -DCMAKE_BUILD_TYPE=Debug
+cmake --build build
+```
+
+## Run
+
+```bash
+build/nemertea --graph graphs/my_graph.json --depth 7
 ```
 
 Adjust parameters as needed.
 
 # Graph Results
 
-- The algotithm outputs whether a Hamiltonian cycle was found and the cycle itself if successful in dot format (graphviz) with same name as input file but with `.dot` extension.
+- The algorithm outputs whether a Hamiltonian cycle was found and the cycle itself if successful in dot format (graphviz) with same name as input file but with `.dot` extension.
 
 ## Example Graphs
 
 ![Big Random Graph with Hamiltonian Cycle](images/big_random.png)
-
-## Debug tips
-- If you get "no input files", ensure `src/` contains `.cpp` files.
-- If compilation fails due to `nlohmann/json.hpp`, either install the system package or place the full `single_include/nlohmann` directory under `src/`.
-- Avoid shared_ptr cycles: use `weak_ptr` for back-references (e.g., Edge -> Vertex).
-- Use `std::enable_shared_from_this<T>` and `std::make_shared<T>()` when calling `shared_from_this()`.
-- Always check pointers returned by functions (`nullptr`) before dereferencing.
 
 ## License & Contact
 © 2021-Present Saulo Popov Zambiasi — All Rights Reserved (Pending Open Source Release post-publication).
