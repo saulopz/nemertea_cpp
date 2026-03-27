@@ -1,4 +1,17 @@
-build/
+# Cache do Language Server e IDEs
+.cache/
 .vscode/
 .idea/
-.git/
+
+# Arquivos de visualização (Graphviz)
+graphs/*.dot
+
+# Binários e executáveis
+*.o
+*.out
+nemertea
+build/
+
+# Arquivos temporários de sistema
+.DS_Store
+Thumbs.db
