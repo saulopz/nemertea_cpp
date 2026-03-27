@@ -14,26 +14,25 @@
 
 #include "nbfs.h"
 #include "node.h"
-
-NBFS::NBFS(Vertex *startVertex, const bool first, const size_t depth) : leaves_(), first_(first), depth_(depth)
-{
-    root_ = new Node(startVertex);
-    leaves_.push(root_);
-}
+#include <iostream>
+#include <queue>
 
 size_t NBFS::Run()
 {
+    std::queue<Node *> leaves;
+
+    leaves.push(root_);
     size_t level = 0;
-    while (!leaves_.empty() && level < depth_)
+    while (!leaves.empty() && level < depth_)
     {
         // It retrieves the number of nodes at that level
         // so we know when we are changing levels.
-        size_t nodes_at_this_level = leaves_.size();
+        size_t nodes_at_this_level = leaves.size();
 
         for (size_t i = 0; i < nodes_at_this_level; i++)
         {
-            Node *node = leaves_.front();
-            leaves_.pop();
+            Node *node = leaves.front();
+            leaves.pop();
 
             Vertex *vertex = node->GetVertex();
             const size_t edge_count = vertex->GetEdgeCount();
@@ -45,7 +44,7 @@ size_t NBFS::Run()
                 if (found)
                     return MakePath(child);
                 else if (child)
-                    leaves_.push(child);
+                    leaves.push(child);
             }
         }
         level++;
@@ -61,30 +60,48 @@ std::pair<Node *, bool> NBFS::SelectChild(Node *node, Edge *edge, const bool fir
 
     auto adjacent = node->GetVertex()->GetAdjacent(edge);
 
-    // Case 2: Only in the first iteration can you visit vertices with TESTING state
-    if (!first && adjacent->GetState() == State::TESTING)
-        return {nullptr, false};
+    if (adjacent->GetState() == State::TESTING)
+    {
+        // Case 2: General blocking of TESTING outside of the first iteration.
+        if (!first)
+            return {nullptr, false};
 
-    // Case 3: Ignore returning to father
+        // Case 3: Ancestor locking in the tree during the first iteration.
+        //         Verify if it's ancestor
+        const Node *ancestor = node->GetParent();
+        while (ancestor)
+        {
+            if (ancestor->GetVertex()->GetId() == adjacent->GetId())
+                return {nullptr, false};
+            ancestor = ancestor->GetParent();
+            std::cout << "." << std::endl;
+        }
+        // Not ancestor, let pass to next cases
+    }
+
+    // Case 4: Ignore returning to father
     Node *parent = node->GetParent();
     if (parent && adjacent->GetId() == parent->GetVertex()->GetId())
         return {nullptr, false};
 
-    // Case 4: If it is root with no active connections yet
+    // Case 5: If it is root with no active connections yet
     Vertex *root_vertex = root_->GetVertex();
     if (adjacent->GetId() == root_vertex->GetId() && root_vertex->GetActiveEdgeCount() == 0)
         return {node->AddChild(adjacent), true};
 
-    // Case 5 and 6: If vertex is active and is neighbor of root, path found or ignored
+    // Case 6 and 7: If vertex is active and is neighbor of root, path found or ignored
     if (adjacent->GetState() == State::ACTIVE)
     {
+        // Case 6: vertex is active and it's a root neighbor, than i found target
         auto edge_to_root = adjacent->GetEdgeTo(root_->GetVertex());
         if (edge_to_root && edge_to_root->GetState() == State::ACTIVE)
             return {node->AddChild(adjacent), true};
+
+        // Case 7: The adjacent vertex is ACTIVE. It's alread in frontier and it's not valid.
         return {nullptr, false};
     }
 
-    // Case 7: Free vertex, add as child
+    // Case 8: Free vertex, add as child
     edge->SetState(State::TESTING);
     adjacent->SetState(State::TESTING);
     return {node->AddChild(adjacent), false};

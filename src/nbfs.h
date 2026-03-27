@@ -17,9 +17,7 @@
 
 #include "node.h"
 #include "vertex.h"
-#include <memory>
 #include <utility>
-#include <queue>
 
 /**
  * Class that implements the Nemertea BFS (NBFS) algorithm.
@@ -37,10 +35,9 @@
 class NBFS
 {
   private:
-    Node *root_;                 // Origin node (NBFS is owner)
-    std::queue<Node *> leaves_; // list of leaves
-    bool first_;                 // If is first interaction
-    size_t depth_;               // Limit of depth
+    Node *root_;   // Origin node (NBFS is owner)
+    bool first_;   // If is first interaction
+    size_t depth_; // Limit of depth
 
     // Private methods
 
@@ -71,7 +68,10 @@ class NBFS
      * @param first A boolean indicating if it's the first interaction.
      * @param depth The maximum depth limit for the search.
      */
-    NBFS(Vertex *startVertex, bool first, size_t depth);
+    NBFS(Vertex *startVertex, bool first, size_t depth) //
+        : root_(new Node(startVertex)),                 //
+          first_(first),                                //
+          depth_(depth) {};
 
     /**
      * @brief Executes the NBFS algorithm.

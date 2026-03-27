@@ -34,18 +34,16 @@ size_t Nemertea(Graph *graph, const size_t depth, const bool cycle)
         path_count += FirstPath(first_vertex);
         first = false;
     }
-
     do
     {
         size_t size = 0;
-        
         do
         {
             auto nbfs = NBFS(current, first, depth);
             size = nbfs.Run();
             path_count += size;
             first = false;
-            
+
         } while (size > 0);
 
         const auto next = NextVertex(prev, current);
@@ -53,6 +51,7 @@ size_t Nemertea(Graph *graph, const size_t depth, const bool cycle)
         current = next;
 
     } while (current && current->GetId() != first_vertex_id && path_count < vertex_count);
+    //} while (current && current->GetId() != first_vertex_id);
 
     // If the current id is equal to the first vertex id, return to the starting vertex - finish
     // if pathCount is equal to vertexCount, all vertices are active - finish
