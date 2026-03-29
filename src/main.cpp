@@ -29,24 +29,24 @@
 
 /**
  * @section Performance and Memory Architecture
- * * The Nemertea algorithm utilizes raw pointers for graph traversal and 
+ * * The Nemertea algorithm utilizes raw pointers for graph traversal and
  * vertex manipulation. This design choice is deliberate and aims to:
- * * 1. Minimize Overhead: Avoiding the reference counting of std::shared_ptr 
- * or the movement semantics of std::unique_ptr within the "hot path" of 
+ * * 1. Minimize Overhead: Avoiding the reference counting of std::shared_ptr
+ * or the movement semantics of std::unique_ptr within the "hot path" of
  * the custom Breadth-First Search (NBFS), where performance is critical.
- * * 2. Ownership Separation: The Graph object (see graph.h) maintains total 
- * ownership (RAII) of all vertices and edges. The Nemertea function 
- * acts solely as a consumer/visitor. Since the graph structure remains 
- * immutable throughout the expansion process, raw pointers provide the 
- * most efficient access pattern without risking memory leaks or 
+ * * 2. Ownership Separation: The Graph object (see graph.h) maintains total
+ * ownership (RAII) of all vertices and edges. The Nemertea function
+ * acts solely as a consumer/visitor. Since the graph structure remains
+ * immutable throughout the expansion process, raw pointers provide the
+ * most efficient access pattern without risking memory leaks or
  * dangling pointers.
- * * 3. Cache Friendliness: Direct pointer dereferencing facilitates compiler 
- * optimizations and aligns with the high-performance requirements of 
+ * * 3. Cache Friendliness: Direct pointer dereferencing facilitates compiler
+ * optimizations and aligns with the high-performance requirements of
  * solving NP-complete problems like the Hamiltonian Cycle.
  */
 
-#include "graph.h"
-#include "nemertea.h"
+#include "graph.hpp"
+#include "nemertea.hpp"
 #include <chrono>
 #include <cxxopts.hpp>
 #include <iostream>
@@ -113,7 +113,8 @@ int main(const int argc, char *argv[])
 
     const auto initial = high_resolution_clock::now();
 
-    const size_t path_count = Nemertea(graph.get(), max_depth, type == "cycle");
+    auto nemertea = Nemertea(graph.get());
+    const size_t path_count = nemertea.Run(max_depth, type == "cycle");
 
     const auto duration = duration_cast<microseconds>( //
         high_resolution_clock::now() - initial         //

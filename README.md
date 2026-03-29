@@ -10,6 +10,9 @@ Nemertea is a C++ implementation of a territorial-expansion algorithm to tackle 
 - Accepts input graphs in JSON format.
 
 ## Input JSON format
+
+The input graph files were created using the [Grafuria](https://codeberg.org/saulopz/grafuria) program.
+
 Example (valid JSON — no trailing commas):
 
 ```json

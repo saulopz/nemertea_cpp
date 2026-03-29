@@ -1,50 +1,39 @@
-// -*- coding: utf-8 -*-
-// nbfs.cpp
-//
-// Nemertea: A Territorial Expansion-Based Algorithm
-// for the Hamiltonian Cycle Problem
-//
-// © 2021-Present Saulo Popov Zambiasi. All rights reserved.
-// Registered at INPI (Brazil).
-// Contact: saulopz@gmail.com
-//
-// This file is part of the Nemertea source code,
-// implementing the Vertex class used in the NBFS algorithm.
-//
+#include "nbfs.hpp"
+#include "graph.hpp"
+#include "vertex.hpp"
+#include <cstdint>
+#include <cstdlib>
 
-#include "nbfs.h"
-#include "node.h"
-#include <iostream>
-#include <queue>
-
-size_t NBFS::Run()
+size_t NBFS::Run(uint64_t startVertex, bool first, size_t depth)
 {
-    std::queue<Node *> leaves;
-
-    leaves.push(root_);
+    while (!leaves_.empty()) // Resetting leaves
+        leaves_.pop();
+    search_id_++; // New search id
+    root_ = graph_->GetVertex(startVertex);
+    root_->AddToSearch(nullptr, search_id_);
+    root_->SetState(State::ACTIVE);
+    leaves_.push(root_);
     size_t level = 0;
-    while (!leaves.empty() && level < depth_)
+    while (!leaves_.empty() && level < depth)
     {
         // It retrieves the number of nodes at that level
         // so we know when we are changing levels.
-        size_t nodes_at_this_level = leaves.size();
+        size_t nodes_at_this_level = leaves_.size();
 
         for (size_t i = 0; i < nodes_at_this_level; i++)
         {
-            Node *node = leaves.front();
-            leaves.pop();
+            auto vertex = leaves_.front();
+            leaves_.pop();
 
-            Vertex *vertex = node->GetVertex();
-            const size_t edge_count = vertex->GetEdgeCount();
-
-            for (size_t i = 0; i < edge_count; i++)
+            auto neighbor_count = vertex->GetNeighborsCount();
+            for (size_t i = 0; i < neighbor_count; i++)
             {
-                Edge *edge = vertex->GetEdge(i);
-                auto [child, found] = SelectChild(node, edge, first_);
+                auto target = vertex->GetNeighbor(i);
+                auto [child, found] = SelectChild(vertex, target, first);
                 if (found)
                     return MakePath(child);
                 else if (child)
-                    leaves.push(child);
+                    leaves_.push(child);
             }
         }
         level++;
@@ -52,87 +41,87 @@ size_t NBFS::Run()
     return 0;
 }
 
-std::pair<Node *, bool> NBFS::SelectChild(Node *node, Edge *edge, const bool first) const
+std::pair<Vertex *, bool> NBFS::SelectChild(Vertex *vertex, Vertex *target, bool first) const
 {
     // Case 1: Edge already active - ignore
-    if (edge->GetState() == State::ACTIVE)
+    if (graph_->GetConnectionState(vertex->GetId(), target->GetId()) == State::ACTIVE)
         return {nullptr, false};
 
-    auto adjacent = node->GetVertex()->GetAdjacent(edge);
-
-    if (adjacent->GetState() == State::TESTING)
+    if (target->GetState() != State::ACTIVE && target->IsTesting(search_id_))
     {
         // Case 2: General blocking of TESTING outside of the first iteration.
         if (!first)
             return {nullptr, false};
 
-        // Case 3: Ancestor locking in the tree during the first iteration.
-        //         Verify if it's ancestor
-        const Node *ancestor = node->GetParent();
-        while (ancestor)
+        // Case 3: Ancestor locking in the tree during only the "first iteration".
+        //         Verify if it's ancestor.
+        auto local = vertex->GetParent();
+        while (local)
         {
-            if (ancestor->GetVertex()->GetId() == adjacent->GetId())
+            if (local->GetId() == target->GetId())
+            {
                 return {nullptr, false};
-            ancestor = ancestor->GetParent();
-            std::cout << "." << std::endl;
+            }
+            local = local->GetParent();
         }
-        // Not ancestor, let pass to next cases
+        // Not ancestor. Let's pass to the next case.
     }
 
     // Case 4: Ignore returning to father
-    Node *parent = node->GetParent();
-    if (parent && adjacent->GetId() == parent->GetVertex()->GetId())
+    auto parent = vertex->GetParent();
+    if (parent && target->GetId() == parent->GetId())
         return {nullptr, false};
 
     // Case 5: If it is root with no active connections yet
-    Vertex *root_vertex = root_->GetVertex();
-    if (adjacent->GetId() == root_vertex->GetId() && root_vertex->GetActiveEdgeCount() == 0)
-        return {node->AddChild(adjacent), true};
+    if (target->GetId() == root_->GetId() && root_->GetActiveConnectionsCount() == 0)
+    {
+        target->AddToSearch(vertex, search_id_);
+        return {target, true};
+    }
 
     // Case 6 and 7: If vertex is active and is neighbor of root, path found or ignored
-    if (adjacent->GetState() == State::ACTIVE)
+    if (target->GetState() == State::ACTIVE)
     {
         // Case 6: vertex is active and it's a root neighbor, than i found target
-        auto edge_to_root = adjacent->GetEdgeTo(root_->GetVertex());
-        if (edge_to_root && edge_to_root->GetState() == State::ACTIVE)
-            return {node->AddChild(adjacent), true};
-
+        auto target_to_root = graph_->GetConnectionState(target->GetId(), root_->GetId());
+        if (target_to_root == State::ACTIVE)
+        {
+            target->AddToSearch(vertex, search_id_);
+            return {target, true};
+        }
         // Case 7: The adjacent vertex is ACTIVE. It's alread in frontier and it's not valid.
         return {nullptr, false};
     }
 
     // Case 8: Free vertex, add as child
-    edge->SetState(State::TESTING);
-    adjacent->SetState(State::TESTING);
-    return {node->AddChild(adjacent), false};
+    graph_->SetConnectionState(vertex->GetId(), target->GetId(), State::TESTING);
+    target->AddToSearch(vertex, search_id_); // Set target as TESTING
+    target->SetState(State::TESTING);
+    return {target, false};
 }
 
-size_t NBFS::MakePath(const Node *node) const
+size_t NBFS::MakePath(Vertex *vertex) const
 {
-    // If there is an active connection to the root, disconnect to open a new region.
-    if (node->GetVertex()->GetState() == State::ACTIVE)
-    {
-        auto edge = root_->GetVertex()->GetEdgeTo(node->GetVertex());
-        if (edge && edge->GetState() == State::ACTIVE)
-            edge->SetState(State::NONE);
-    }
+    // If there is an active connection to the root, disconnect to open to the new region.
+    if (vertex->GetState() == State::ACTIVE && vertex->GetId() != root_->GetId())
+        if (graph_->GetConnectionState(root_->GetId(), vertex->GetId()) == State::ACTIVE)
+            graph_->SetConnectionState(root_->GetId(), vertex->GetId(), State::INACTIVE);
 
     // It makes its way back to the root and activates the vertices and edges
-    size_t new_vertex_count_ = 0;
-    auto n = node;
-    while (n->GetParent())
+    size_t new_vertex_count = 0;
+    auto local = vertex;
+    do
     {
-        if (n->GetVertex()->GetState() != State::ACTIVE)
-            new_vertex_count_++;
-        n->GetVertex()->SetState(State::ACTIVE);
-        if (n->GetEdge())
-            n->GetEdge()->SetState(State::ACTIVE);
-        n = n->GetParent();
-    }
-    return new_vertex_count_;
-}
+        if (local->GetState() != State::ACTIVE)
+        {
+            local->SetState(State::ACTIVE);
+            new_vertex_count++;
+        }
+        auto parent = local->GetParent();
+        if (parent) // Change connection to parent as ACTIVE
+            graph_->SetConnectionState(local->GetId(), parent->GetId(), State::ACTIVE);
+        local = parent; // Go to parent
+    } while (root_->GetId() != local->GetId());
 
-NBFS::~NBFS()
-{
-    delete root_;
+    return new_vertex_count;
 }

@@ -1,62 +1,34 @@
-// -*- coding: utf-8 -*-
-// vertex.cpp
-//
-// Nemertea: A Territorial Expansion-Based Algorithm
-// for the Hamiltonian Cycle Problem
-//
-// © 2021-Present Saulo Popov Zambiasi. All rights reserved.
-// Registered at INPI (Brazil).
-// Contact: saulopz@gmail.com
-//
-// This file is part of the Nemertea source code,
-// implementing the Vertex class used in the NBFS algorithm.
-//
+#include "vertex.hpp"
 
-#include "vertex.h"
-
-Vertex *Vertex::GetAdjacent(const Edge *edge) const
+void Vertex::Connect(Vertex *target)
 {
-    const auto a = edge->GetA();
-    const auto b = edge->GetB();
-    if (a->id_ == id_)
-        return b;
-    if (b->id_ == id_)
-        return a;
-    return nullptr;
-}
-
-void Vertex::AddEdge(Edge *edge)
-{
-    edges_.push_back(edge);
+    neighbors_.push_back(target);
 };
 
-Edge *Vertex::GetEdgeTo(const Vertex *v) const
-{
-    if (!v)
-        return nullptr;
-    for (const auto &edge : edges_)
-        if (edge->Contains(v))
-            return edge;
-    return nullptr;
-}
-
-bool Vertex::IsConnected(const Vertex *v) const
-{
-    return GetEdgeTo(v) ? true : false;
-}
-
-void Vertex::ChangeActiveEdge(const State current_state, State new_state)
+void Vertex::ChangeActiveConnection(State current_state, State new_state)
 {
     if (current_state != State::ACTIVE && new_state == State::ACTIVE)
     {
-        active_edge_count_++;
+        active_connection_count_++;
         return;
     }
     if (current_state == State::ACTIVE && new_state != State::ACTIVE)
-        active_edge_count_--;
+        active_connection_count_--;
 }
 
-Vertex::~Vertex()
+std::string stateToString(const State state)
 {
-    edges_.clear();
+    switch (state)
+    {
+    case State::NONE:      // Not connected
+        return "NONE";     //
+    case State::INACTIVE:  // Connected but inactive
+        return "INACTIVE"; //
+    case State::ACTIVE:    // Connected and active
+        return "ACTIVE";   //
+    case State::TESTING:   // Connected and testing
+        return "TESTING";  //
+    default:               //
+        return "UNKNOWN";  // Some error
+    }
 }

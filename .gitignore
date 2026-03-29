@@ -11,6 +11,8 @@ graphs/*.dot
 *.out
 nemertea
 build/
+backup/
+docs/
 
 # Arquivos temporários de sistema
 .DS_Store

@@ -1,18 +1,4 @@
-// -*- coding: utf-8 -*-
-// graph.cpp
-//
-// Nemertea: A Territorial Expansion-Based Algorithm
-// for the Hamiltonian Cycle Problem
-//
-// © 2021-Present Saulo Popov Zambiasi. All rights reserved.
-// Registered at INPI (Brazil).
-// Contact: saulopz@gmail.com
-//
-// This file is part of the Nemertea source code,
-// implementing the Vertex class used in the NBFS algorithm.
-//
-
-#include "graph.h"
+#include "graph.hpp"
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -20,12 +6,12 @@
 
 using json = nlohmann::json;
 
-Vertex *Graph::GetVertexById(const uint64_t id) const
+Vertex *Graph::GetRandomVertex()
 {
-    for (const auto &vertex : vertices_)
-        if (vertex->GetId() == id)
-            return vertex;
-    return nullptr;
+    if (vertices_.empty())
+        return nullptr;
+    const size_t random_index = index_distribution_(random_engine_);
+    return vertices_[random_index];
 }
 
 void Graph::Load()
@@ -62,6 +48,8 @@ void Graph::Load()
             }
         }
     }
+    vector_size_ = vertices_.size();
+    adj_.assign(vector_size_ * vector_size_, State::NONE);
 
     // Load edges
     if (data.contains("edge") && data["edge"].is_array())
@@ -70,24 +58,17 @@ void Graph::Load()
         {
             if (e.contains("id") && e.contains("a") && e.contains("b") && e.contains("weight"))
             {
-                uint64_t id = e["id"];
                 uint64_t a_id = e["a"];
                 uint64_t b_id = e["b"];
-                int weight = e["weight"];
+                // int weight = e["weight"]; // Not necessary to Nemertea now
 
-                auto a_vertex = GetVertexById(a_id);
-                auto b_vertex = GetVertexById(b_id);
-
-                if (a_vertex && b_vertex)
-                {
-                    auto edge = new Edge(id, a_vertex, b_vertex, weight);
-                    edges_.push_back(edge);
-                    a_vertex->AddEdge(edge);
-                    b_vertex->AddEdge(edge);
-                }
+                vertices_[a_id]->Connect(vertices_[b_id]);
+                vertices_[b_id]->Connect(vertices_[a_id]);
+                SetAdjacent(a_id, b_id);
             }
         }
     }
+
     if (!vertices_.empty())
     {
         index_distribution_ = std::uniform_int_distribution<size_t>(0, vertices_.size() - 1);
@@ -125,15 +106,21 @@ void Graph::Save(bool solved)
     }
     ss << "\n";
 
-    // Get edges
-    for (const auto &edge : edges_)
+    size_t n = vector_size_;
+    for (size_t i = 0; i < n; i++)
     {
-        ss << "\tV" << edge->GetA()->GetId();
-        ss << " -- V" << edge->GetB()->GetId();
-        if (edge->GetState() == State::ACTIVE)
-            ss << " [color=\"black\", penwidth=50.0];\n";
-        else
-            ss << " [color=\"blue\", penwidth=10.0];\n";
+        for (size_t j = i + 1; j < n; j++)
+        {
+            if (adj_[i * n + j] != State::NONE)
+            {
+                ss << "\tV" << i;   // Vector ID a
+                ss << " -- V" << j; // Vector ID b
+                if (adj_[i * n + j] == State::ACTIVE)
+                    ss << " [color=\"black\", penwidth=50.0];\n";
+                else
+                    ss << " [color=\"blue\", penwidth=10.0];\n";
+            }
+        }
     }
     ss << "}\n";
 
@@ -153,12 +140,26 @@ void Graph::Save(bool solved)
     dot_file.close();
 }
 
+void Graph::SwitchActiveConnection(uint64_t a, uint64_t b, bool activate)
+{
+    auto vertices = vertices_.data();
+    auto i = a * vector_size_ + b;
+    if (adj_[i] == State::INACTIVE && activate)
+    {
+        vertices[a]->AddActiveConnections();
+        vertices[b]->AddActiveConnections();
+    }
+    if (adj_[i] == State::ACTIVE && !activate)
+    {
+        vertices[a]->DecActiveConnections();
+        vertices[b]->DecActiveConnections();
+    }
+}
+
 Graph::~Graph()
 {
     for (const auto &vertex : vertices_)
         delete vertex;
-    for (const auto &edge : edges_)
-        delete edge;
     vertices_.clear();
-    edges_.clear();
+    adj_.clear();
 }
