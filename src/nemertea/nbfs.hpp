@@ -9,10 +9,10 @@
 class NBFS
 {
   private:
-    Graph *graph_;
-    Vertex *root_;
-    uint64_t search_id_;
-    std::queue<Vertex *> leaves_;
+    Graph *graph_;                // Graph
+    Vertex *root_;                // root vertex on the NBFS search
+    uint64_t search_id_;          // current id of NBFS search
+    std::queue<Vertex *> leaves_; // leaves of the NBFS search
 
     std::pair<Vertex *, bool> SelectChild(Vertex *vertex, Vertex *target, bool first) const;
 
@@ -21,7 +21,7 @@ class NBFS
   public:
     NBFS(Graph *graph) : graph_(graph), root_(nullptr) {};
 
-    size_t Run(uint64_t startVertex, bool first, size_t depth);
+    size_t Run(Vertex *startVertex, bool first, size_t depth);
 };
 
 #endif // NBFS_HPP_

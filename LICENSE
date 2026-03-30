@@ -1,0 +1,28 @@
+# PROTECTIVE LICENSE FOR PEER-REVIEW
+
+Copyright (c) 2021-2026 Saulo Popov Zambiasi. All Rights Reserved.
+
+1. OWNERSHIP & ORIGINAL WORK
+The "Nemertea" algorithm, including its specific implementation, 
+territorial-expansion logic, and associated BFS-based optimizations
+(NBFS), is the original intellectual property of Saulo Popov Zambiasi.
+
+2. COMPARATIVE ALGORITHMS (THIRD-PARTY)
+The implementations of "Backtracking" and "Warnsdorff's Heuristic" 
+included in this suite are provided solely for comparative 
+benchmarking purposes. They are standard algorithmic 
+implementations and their conceptual authorship belongs to their 
+respective historical creators.
+
+3. RESTRICTIONS
+This entire suite is provided to reviewers and researchers for 
+evaluation purposes only. Unauthorized copying, distribution, or 
+use of the "Nemertea" logic for publication or commercial ends 
+is strictly prohibited until the official publication of the 
+associated research paper.
+
+4. FUTURE OPEN SOURCE COMMITMENT
+Upon acceptance and publication of the research, the author 
+commits to re-licensing this entire suite under an Open Source 
+initiative (e.g., MIT or GNU GPL) to foster multilateral 
+scientific collaboration.

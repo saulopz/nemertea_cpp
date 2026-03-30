@@ -21,23 +21,24 @@ class Vertex;
 class Vertex
 {
   private:
-    Vertex *parent_;                  // Parent in NBFS tree
     uint64_t id_;                     // Vertex id
     std::string name_;                // Vertex name or description
     double x_, y_;                    // Vertex position on 2D space
-    size_t active_connection_count_;  // Number of active edges
+    Vertex *parent_;                  // Parent in NBFS tree
     std::vector<Vertex *> neighbors_; // List of edges connected
+    size_t active_connection_count_;  // Number of active edges
     State state_;                     // Vertex state (NONE, ACTIVE, TESTING)
     uint64_t search_id_;              // Used in NBFS
+
   public:
     Vertex(const uint64_t id, std::string name, const double x, const double y)
-        : id_(id), name_(std::move(name)), x_(x), y_(y), active_connection_count_(0), neighbors_(), state_(State::NONE),
-          search_id_(0)
-    {
-    }
+        : id_(id), name_(std::move(name)), x_(x), y_(y), parent_(nullptr), neighbors_(), active_connection_count_(0),
+          state_(State::NONE), search_id_(0) {};
 
     void ChangeActiveConnection(State current_state, State new_state);
+
     void Connect(Vertex *target);
+
     ~Vertex() {};
 
     [[nodiscard]] uint64_t GetId() const

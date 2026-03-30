@@ -7,12 +7,10 @@
 graphs/*.dot
 
 # Binários e executáveis
-*.o
-*.out
-nemertea
 build/
 backup/
 docs/
+results/
 
 # Arquivos temporários de sistema
 .DS_Store

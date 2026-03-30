@@ -27,7 +27,7 @@ size_t Nemertea::Run(const size_t depth, const bool cycle) const
         size_t size = 0;
         do
         {
-            size = nbfs.Run(current->GetId(), first, depth);
+            size = nbfs.Run(current, first, depth);
             path_count += size;
             first = false;
 
