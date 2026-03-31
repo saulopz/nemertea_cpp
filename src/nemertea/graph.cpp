@@ -99,7 +99,7 @@ void Graph::Save(bool solved)
         ss << " [label=\"" << vertex->GetName() << "\", style=filled,";
         ss << " pos=\"" << vertex->GetX() << "," << vertex->GetY() << "!\",";
 
-        if (vertex->GetState() == State::ACTIVE)
+        if (vertex->GetState() == State::CONQUERED)
             ss << " fillcolor=\"black\", color=\"black\"];\n";
         else
             ss << " fillcolor=\"blue\", color=\"blue\"];\n";
@@ -115,7 +115,7 @@ void Graph::Save(bool solved)
             {
                 ss << "\tV" << i;   // Vector ID a
                 ss << " -- V" << j; // Vector ID b
-                if (adj_[i * n + j] == State::ACTIVE)
+                if (adj_[i * n + j] == State::CONQUERED)
                     ss << " [color=\"black\", penwidth=50.0];\n";
                 else
                     ss << " [color=\"blue\", penwidth=10.0];\n";
@@ -138,22 +138,6 @@ void Graph::Save(bool solved)
     }
     dot_file << dot_content;
     dot_file.close();
-}
-
-void Graph::SwitchActiveConnection(uint64_t a, uint64_t b, bool activate)
-{
-    auto vertices = vertices_.data();
-    auto i = a * vector_size_ + b;
-    if (adj_[i] == State::INACTIVE && activate)
-    {
-        vertices[a]->AddActiveConnections();
-        vertices[b]->AddActiveConnections();
-    }
-    if (adj_[i] == State::ACTIVE && !activate)
-    {
-        vertices[a]->DecActiveConnections();
-        vertices[b]->DecActiveConnections();
-    }
 }
 
 Graph::~Graph()

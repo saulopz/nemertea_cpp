@@ -9,9 +9,8 @@
 enum class State
 {
     NONE = 0,
-    INACTIVE = 1,
-    ACTIVE = 2,
-    TESTING = 3
+    CONQUERED = 2,
+    INACTIVE = 3
 };
 
 std::string stateToString(State state);
@@ -24,18 +23,16 @@ class Vertex
     uint64_t id_;                     // Vertex id
     std::string name_;                // Vertex name or description
     double x_, y_;                    // Vertex position on 2D space
-    Vertex *parent_;                  // Parent in NBFS tree
-    std::vector<Vertex *> neighbors_; // List of edges connected
-    size_t active_connection_count_;  // Number of active edges
-    State state_;                     // Vertex state (NONE, ACTIVE, TESTING)
-    uint64_t search_id_;              // Used in NBFS
+    Vertex *parent_;                  // Vertex parent in NBFS tree
+    std::vector<Vertex *> neighbors_; // List of connected neighboring vertices
+    State state_;                     // Vertex state
+    uint64_t generation_;             // If the search_id_ in NBFS is equal,
+                                      //    the vertex is currently being tested.
 
   public:
     Vertex(const uint64_t id, std::string name, const double x, const double y)
-        : id_(id), name_(std::move(name)), x_(x), y_(y), parent_(nullptr), neighbors_(), active_connection_count_(0),
-          state_(State::NONE), search_id_(0) {};
-
-    void ChangeActiveConnection(State current_state, State new_state);
+        : id_(id), name_(std::move(name)), x_(x), y_(y), parent_(nullptr), neighbors_(),
+          state_(State::NONE), generation_(0) {};
 
     void Connect(Vertex *target);
 
@@ -48,7 +45,7 @@ class Vertex
 
     [[nodiscard]] uint64_t GetCurrentSearchId() const
     {
-        return search_id_;
+        return generation_;
     }
 
     [[nodiscard]] Vertex *GetParent() const
@@ -56,15 +53,15 @@ class Vertex
         return parent_;
     }
 
-    void AddToSearch(Vertex *parent, uint64_t search_id)
+    void AddToGeneration(Vertex *parent, uint64_t generation)
     {
         parent_ = parent;
-        search_id_ = search_id;
+        generation_ = generation;
     }
 
     [[nodiscard]] bool IsTesting(uint64_t search_id)
     {
-        return search_id_ == search_id;
+        return generation_ == search_id;
     }
 
     [[nodiscard]] const std::string &GetName() const
@@ -100,21 +97,6 @@ class Vertex
     void SetState(const State state)
     {
         state_ = state;
-    };
-
-    void AddActiveConnections()
-    {
-        active_connection_count_++;
-    }
-
-    void DecActiveConnections()
-    {
-        active_connection_count_--;
-    }
-
-    [[nodiscard]] size_t GetActiveConnectionsCount() const
-    {
-        return active_connection_count_;
     };
 };
 

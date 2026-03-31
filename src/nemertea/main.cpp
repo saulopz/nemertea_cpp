@@ -114,7 +114,7 @@ int main(const int argc, char *argv[])
     const auto initial = high_resolution_clock::now();
 
     auto nemertea = Nemertea(graph.get());
-    const size_t path_count = nemertea.Run(max_depth, type == "cycle");
+    const size_t path_count = nemertea.Walk(max_depth, type == "cycle");
 
     const auto duration = duration_cast<microseconds>( //
         high_resolution_clock::now() - initial         //

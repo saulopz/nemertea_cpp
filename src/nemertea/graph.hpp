@@ -33,7 +33,6 @@ class Graph
     }
     void Load();
     void Save(bool solved);
-    void SwitchActiveConnection(uint64_t a, uint64_t b, bool activate);
     ~Graph();
 
     [[nodiscard]] Vertex *GetRandomVertex();

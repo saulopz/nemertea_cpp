@@ -1,16 +1,16 @@
 #include "nemertea.hpp"
-#include "nbfs.hpp"
+#include "proboscis.hpp"
 
 // size_t FirstPath(Graph *graph, Vertex *root);
 
-size_t Nemertea::Run(const size_t depth, const bool cycle) const
+size_t Nemertea::Walk(const size_t depth, const bool cycle) const
 {
-    auto nbfs = NBFS(graph_);
+    auto proboscis = Proboscis(graph_);
     Vertex *prev = nullptr;                             // Previous vertex, starts null
     const auto vertex_count = graph_->GetVertexCount(); // Number of vertices in the graph
     auto first_vertex = graph_->GetRandomVertex();      // Take a random vertex
     const auto first_vertex_id = first_vertex->GetId(); // Get its id
-    first_vertex->SetState(State::ACTIVE);              // The first vertex is ACTIVE
+    first_vertex->SetState(State::CONQUERED);              // The first vertex is ACTIVE
     auto current = first_vertex;                        // Navigation vertex
     size_t path_count = 1;                              // The first vertex is already on the path
     bool first = true;
@@ -27,13 +27,13 @@ size_t Nemertea::Run(const size_t depth, const bool cycle) const
         size_t size = 0;
         do
         {
-            size = nbfs.Run(current, first, depth);
+            size = proboscis.Evert(current, first, depth);
             path_count += size;
             first = false;
 
         } while (size > 0);
 
-        const auto next = NextVertex(prev, current);
+        const auto next = Spot(prev, current);
         prev = current;
         current = next;
 
@@ -45,13 +45,13 @@ size_t Nemertea::Run(const size_t depth, const bool cycle) const
     return path_count;
 }
 
-Vertex *Nemertea::NextVertex(const Vertex *prev, const Vertex *current) const
+Vertex *Nemertea::Spot(const Vertex *prev, const Vertex *current) const
 {
     const auto neighbor_count = current->GetNeighborsCount();
     for (size_t i = 0; i < neighbor_count; i++)
     {
         auto neighbor = current->GetNeighbor(i);
-        if (graph_->GetConnectionState(current->GetId(), neighbor->GetId()) == State::ACTIVE)
+        if (graph_->GetConnectionState(current->GetId(), neighbor->GetId()) == State::CONQUERED)
         {
             if (!prev || neighbor->GetId() != prev->GetId())
                 return neighbor;
@@ -73,10 +73,10 @@ size_t Nemertea::FirstPath(Vertex *root) const
         while (i < neighbor_count && !found)
         {
             auto neighbor = vertex->GetNeighbor(i);
-            if (neighbor->GetState() != State::ACTIVE)
+            if (neighbor->GetState() != State::CONQUERED)
             {
-                graph_->SetConnectionState(vertex->GetId(), neighbor->GetId(), State::ACTIVE);
-                neighbor->SetState(State::ACTIVE);
+                graph_->SetConnectionState(vertex->GetId(), neighbor->GetId(), State::CONQUERED);
+                neighbor->SetState(State::CONQUERED);
                 count++;
                 vertex = neighbor;
                 found = true;
