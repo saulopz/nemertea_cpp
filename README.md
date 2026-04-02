@@ -86,8 +86,16 @@ If you wish to run a single test manually:
 ![RNET-58 Graph with Hamiltonian Cycle](images/rnet-58.png)
 
 
-## 📜 License & Contact
-© 2021-2026 **Saulo Popov Zambiasi** — All Rights Reserved.
-*Note: Full Open Source release planned post-publication.*
+## 📜 License & Scientific Attribution
 
-**Contact:** saulopz@gmail.com
+This project is licensed under the MIT License — see the LICENSE file for details.
+
+Scientific Integrity & Intellectual Property:
+
+- Algorithm Registration: The Nemertea algorithm and its implementation are officially registered with the Brazilian National Institute of Industrial Property (INPI) under registration number BR512025005332-0.
+- Peer-Review Status: This repository provides the source code and benchmarking suite associated with a manuscript currently under review at IEEE Latin America Transactions.
+- Citation: If you use this software for research purposes, please cite the associated work (citation details will be updated upon final publication).
+
+**Contact:** **Saulo Popov Zambiasi** (saulopz@gmail.com)
+
+Professor and Researcher

@@ -1,28 +1,21 @@
-# PROTECTIVE LICENSE FOR PEER-REVIEW
+MIT License
 
-Copyright (c) 2021-2026 Saulo Popov Zambiasi. All Rights Reserved.
+Copyright (c) 2021-2026 Saulo Popov Zambiasi
 
-1. OWNERSHIP & ORIGINAL WORK
-The "Nemertea" algorithm, including its specific implementation, 
-territorial-expansion logic, and associated BFS-based optimizations
-(NBFS), is the original intellectual property of Saulo Popov Zambiasi.
+Permission is hereby granted, free of charge, to any person obtaininga copy
+of this software and associated documentation files (the "Software"), to
+deal in the Software without restriction, including without limitation the
+rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+sell copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-2. COMPARATIVE ALGORITHMS (THIRD-PARTY)
-The implementations of "Backtracking" and "Warnsdorff's Heuristic" 
-included in this suite are provided solely for comparative 
-benchmarking purposes. They are standard algorithmic 
-implementations and their conceptual authorship belongs to their 
-respective historical creators.
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
 
-3. RESTRICTIONS
-This entire suite is provided to reviewers and researchers for 
-evaluation purposes only. Unauthorized copying, distribution, or 
-use of the "Nemertea" logic for publication or commercial ends 
-is strictly prohibited until the official publication of the 
-associated research paper.
-
-4. FUTURE OPEN SOURCE COMMITMENT
-Upon acceptance and publication of the research, the author 
-commits to re-licensing this entire suite under an Open Source 
-initiative (e.g., MIT or GNU GPL) to foster multilateral 
-scientific collaboration.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
