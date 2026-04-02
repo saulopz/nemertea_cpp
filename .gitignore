@@ -5,12 +5,12 @@
 
 # Arquivos de visualização (Graphviz)
 graphs/*.dot
+results/*.dot
 
 # Binários e executáveis
 build/
 backup/
 docs/
-results/
 
 # Arquivos temporários de sistema
 .DS_Store

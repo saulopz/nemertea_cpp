@@ -53,13 +53,13 @@
 
 int main(const int argc, char *argv[])
 {
-    // Parameters inicialization ---------------------------------------
+    // Parameters inicialization ------------------------------------
 
-    cxxopts::Options options(                                //
-        "nemertea",                                          //
-        "Nemertea: A Territorial Expansion-Based Algorithm " //
-        "for the Hamiltonian Cycle Problem");
-
+    cxxopts::Options options(                                      //
+        "nemertea",                                                //
+        "Nemertea: A Territorial Expansion-Based Algorithm "       //
+        "for the Hamiltonian Cycle Problem");                      //
+                                                                   //
     options.add_options()                                          //
         ("g,graph", "Graph file (.json)",                          //
          cxxopts::value<std::string>()->default_value(""))         //
@@ -124,7 +124,7 @@ int main(const int argc, char *argv[])
 
     std::cout << "Nemertea execution " << duration.count() //
               << " microseconds. Found " << path_count     //
-              << " of " << vertex_count << " vertices =>";
+              << " of " << vertex_count << " vertices =>"; //
 
     const bool solved = path_count == vertex_count;
     if (solved)

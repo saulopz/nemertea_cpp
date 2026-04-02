@@ -87,6 +87,7 @@ def run_benchmark():
                     continue
 
                 success_times = []
+                failures_times = []
                 found_count = 0
                 any_found = False
                 last_status = "NOT_FOUND"
@@ -115,6 +116,8 @@ def run_benchmark():
                         any_found = True
                         if us >= 0:
                             success_times.append(us)
+                    else:
+                        failures_times.append(us)
 
                     last_status = status
                     print(f"{i+1} ", end="", flush=True)
@@ -130,7 +133,9 @@ def run_benchmark():
                     med = statistics.median(success_times)
                     v_min, v_max = min(success_times), max(success_times)
                 else:
-                    med = v_min = v_max = -1
+                    med = statistics.median(failures_times)
+                    v_min, v_max = min(failures_times), max(failures_times)
+                    # med = v_min = v_max = -1
 
                 stat_str = f"| {final_status:12} | Found: {found_count}/{RUNS} | Mediana: {fmt_time(med)}"
                 print(stat_str)

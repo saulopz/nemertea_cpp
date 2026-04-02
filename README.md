@@ -83,7 +83,7 @@ If you wish to run a single test manually:
 
 ## Example Graphs
 
-![Big Random Graph with Hamiltonian Cycle](images/big_random.png)
+![RNET-58 Graph with Hamiltonian Cycle](images/rnet-58.png)
 
 
 ## 📜 License & Contact
