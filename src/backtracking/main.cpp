@@ -1,16 +1,17 @@
 //
-// Hamiltonian Cycle — Backtracking (DFS exato)
+// Hamiltonian Cycle — Backtracking (Acurate DFS)
 //
-// Referência clássica:
+// Classic Rerefence:
 //   Ore, O. (1960). A note on Hamiltonian circuits.
 //   American Mathematical Monthly, 67(1), 55.
 //
-// Uso:
+// Usage:
 //   backtracking <grafo.json> <saida.dot> [timeout_s]
 //
-//   timeout_s  (opcional, padrão 60) — abandona a busca após N segundos e
-//              registra TIMEOUT no .dot; permite incluir o caso na tabela
-//              do artigo como "não convergiu".
+//   timeout_s  (Optional, default 60) — abandons the search after N
+//              seconds and logs a TIMEOUT in the .dot file; allows
+//              the case to be included in the article table as "did
+//              not converge".
 //
 
 #include "../../src/common/graph.hpp"
@@ -120,7 +121,7 @@ int main(int argc, char* argv[])
     std::string out_path = argv[2];
     int         timeout_s = (argc >= 4) ? std::atoi(argv[3]) : 60;
 
-    // ── Load (não cronometrado) ───────────────────────────────────────────────
+    // ── Load (not timed) ──────────────────────────────────────────────────────
     Graph g;
     try { g = load_graph(in_path); }
     catch (const std::exception& ex) {
@@ -140,12 +141,12 @@ int main(int argc, char* argv[])
     });
     watchdog.detach();
 
-    // ── Algoritmo (cronometrado) ──────────────────────────────────────────────
+    // ── Algorithm (timed) ──────────────────────────────────────────────
     BT bt(g, timed_out);
 
-    // Tenta cada vértice como ponto de partida até encontrar um HC ou timeout.
-    // Em grafos não-dirigidos, o HC existe independente do vértice inicial,
-    // mas partir de vértices de grau baixo costuma convergir mais rápido.
+    // Try each vertex as a starting point until you find a converging point
+    // (CH) or timeout. In undirected graphs, the CH exists independently of the
+    // initial vertex, but starting from low-degree vertices usually leads to faster convergence.
     std::vector<int> start_order;
     start_order.reserve(n);
     for (auto& v : g.vertices) start_order.push_back(v.id);
@@ -173,7 +174,7 @@ int main(int argc, char* argv[])
         ? -1LL
         : std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0).count();
 
-    // ── Resultado ─────────────────────────────────────────────────────────────
+    // ── Result ─────────────────────────────────────────────────────────────
     if (!bt.result.empty()) {
         std::cout << "Ciclo hamiltoniano ENCONTRADO\n";
         std::cout << "Tempo: " << elapsed_us << " µs\n";
@@ -184,7 +185,7 @@ int main(int argc, char* argv[])
         std::cout << "Tempo: " << elapsed_us << " µs\n";
     }
 
-    // ── Gravar DOT (não cronometrado) ─────────────────────────────────────────
+    // ── Save DOT (not timed) ───────────────────────────────────────────────
     try {
         write_dot(out_path, in_path, "Backtracking (DFS + Warnsdorff order)",
                   g, elapsed_us, bt.result);

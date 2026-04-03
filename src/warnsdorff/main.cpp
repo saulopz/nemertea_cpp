@@ -1,20 +1,20 @@
 //
 // Hamiltonian Cycle — Heurística de Warnsdorff
 //
-// Referência:
+// Reference:
 //   Warnsdorff, H. C. (1823). Des Rösselsprunges einfachste und allgemeinste
 //   Lösung. Schmalkalden.
 //   Pohl, I. (1967). A method for finding Hamilton paths and Knight's tours.
 //   Communications of the ACM, 10(7), 446–449.
 //
-// Estratégia:
-//   A cada passo, escolhe o vizinho não visitado com MENOR grau de saída
-//   (número de vizinhos ainda não visitados). Isso tende a evitar becos sem
-//   saída deixando vértices bem conectados para o final.
-//   É heurístico: não garante encontrar o HC mesmo que ele exista.
-//   Quando falha no fechamento do ciclo, reinicia a partir de outro vértice.
+// Strategy:
+//   At each step, it chooses the unvisited neighbor with the LOWEST out-degree
+//   (number of neighbors not yet visited). This tends to avoid dead ends,
+//   leaving well-connected vertices for the end. It is heuristic: it does not
+//   guarantee finding the HC even if it exists.
+//   When it fails to close the loop, it restarts from another vertex.
 //
-// Uso:
+// Usage:
 //   warnsdorff <grafo.json> <saida.dot>
 //
 
@@ -29,10 +29,10 @@
 using Clock = std::chrono::high_resolution_clock;
 
 // ─────────────────────────────────────────────────────────────────────────────
-//  Warnsdorff: uma tentativa a partir de um vértice inicial
+//  Warnsdorff: an attempt starting from an initial vertex
 // ─────────────────────────────────────────────────────────────────────────────
 
-// Retorna o caminho (ids) fechado se encontrou HC, vazio caso contrário.
+// Returns the closed path (ids) if HC was found, empty otherwise.
 static std::vector<int> warnsdorff_try(const Graph &g, int start_id)
 {
     int n = static_cast<int>(g.vertices.size());
@@ -66,7 +66,7 @@ static std::vector<int> warnsdorff_try(const Graph &g, int start_id)
         if (it == g.adj.end())
             return {};
 
-        // Escolhe o vizinho não visitado com menor grau de saída (Warnsdorff)
+        // Choose the unvisited neighbor with the lowest degree of exit (Warnsdorff).
         int best_id = -1;
         int best_deg = std::numeric_limits<int>::max();
 
@@ -83,7 +83,7 @@ static std::vector<int> warnsdorff_try(const Graph &g, int start_id)
         }
 
         if (best_id == -1)
-            return {}; // beco sem saída
+            return {}; // dead end
 
         mark(best_id);
         path.push_back(best_id);
@@ -98,7 +98,7 @@ static std::vector<int> warnsdorff_try(const Graph &g, int start_id)
             return path;
         }
 
-    return {}; // não fechou
+    return {}; // It didn't close.
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -109,14 +109,14 @@ int main(int argc, char *argv[])
 {
     if (argc < 3)
     {
-        std::cerr << "Uso: warnsdorff <grafo.json> <saida.dot>\n";
+        std::cerr << "Usage: warnsdorff <graph.json> <output.dot>\n";
         return 1;
     }
 
     std::string in_path = argv[1];
     std::string out_path = argv[2];
 
-    // ── Load (não cronometrado) ───────────────────────────────────────────────
+    // ── Load (not timed) ─────────────────────────────────────────────────────
     Graph g;
     try
     {
@@ -124,18 +124,18 @@ int main(int argc, char *argv[])
     }
     catch (const std::exception &ex)
     {
-        std::cerr << "Erro ao carregar grafo: " << ex.what() << "\n";
+        std::cerr << "Error loading graph: " << ex.what() << "\n";
         return 1;
     }
 
     int n = static_cast<int>(g.vertices.size());
-    std::cout << "Grafo: " << n << " vértices, " << g.edges.size() << " arestas\n";
+    std::cout << "Graph: " << n << " vertices, " << g.edges.size() << " edges\n";
 
-    // ── Algoritmo (cronometrado) ──────────────────────────────────────────────
+    // ── Algorithm (timed) ──────────────────────────────────────────────
     //
-    // Tenta cada vértice como ponto de partida, na ordem de grau crescente.
-    // Quando há empate no critério de Warnsdorff, o primeiro candidato na
-    // lista de adjacência é escolhido — determinístico e reproduzível.
+    // Try each vertex as a starting point, in order of increasing degree.
+    // When there is a tie in the Warnsdorff criterion, the first candidate
+    // in the adjacency list is chosen, deterministic and reproducible.
 
     std::vector<int> start_order;
     start_order.reserve(n);
@@ -158,28 +158,28 @@ int main(int argc, char *argv[])
     auto t1 = Clock::now();
     long long elapsed_us = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0).count();
 
-    // ── Resultado ─────────────────────────────────────────────────────────────
+    // ── Result ─────────────────────────────────────────────────────────────
     if (!result.empty())
     {
-        std::cout << "Ciclo hamiltoniano ENCONTRADO\n";
-        std::cout << "Tempo: " << elapsed_us << " µs\n";
+        std::cout << "Hamiltonian cycle FOUND\n";
+        std::cout << "Time: " << elapsed_us << " µs\n";
     }
     else
     {
-        std::cout << "Nenhum ciclo hamiltoniano encontrado "
-                     "(heurística não garante completude)\n";
-        std::cout << "Tempo: " << elapsed_us << " µs\n";
+        std::cout << "No Hamiltonian cycle found. "
+                     "(Heuristics do not guarantee completeness.)\n";
+        std::cout << "Time: " << elapsed_us << " µs\n";
     }
 
-    // ── Gravar DOT (não cronometrado) ─────────────────────────────────────────
+    // ── Save DOT (not timed) ─────────────────────────────────────────
     try
     {
         write_dot(out_path, in_path, "Warnsdorff", g, elapsed_us, result);
-        std::cout << "DOT gravado em: " << out_path << "\n";
+        std::cout << "DOT recorded in: " << out_path << "\n";
     }
     catch (const std::exception &ex)
     {
-        std::cerr << "Erro ao gravar DOT: " << ex.what() << "\n";
+        std::cerr << "Error recording DOT: " << ex.what() << "\n";
         return 1;
     }
 

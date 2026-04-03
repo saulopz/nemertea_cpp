@@ -9,12 +9,15 @@ std::string stateToString(const State state)
 {
     switch (state)
     {
-    case State::NONE:       // Not connected
-        return "NONE";      //
-    case State::CONQUERED:  // Connected and active
-        return "CONQUERED"; //
-    case State::INACTIVE:   // Connected but inactive
-        return "INACTIVE";  //
+    case State::NONE:       //
+        return "NONE";      // Not connected
+        [[fallthrough]];    //
+    case State::CONQUERED:  //
+        return "CONQUERED"; // Connected and active
+        [[fallthrough]];    //
+    case State::INACTIVE:   //
+        return "INACTIVE";  // Connected but inactive
+        [[fallthrough]];    //
     default:                //
         return "UNKNOWN";   // Some error
     }
