@@ -1,3 +1,22 @@
+// -*- coding: utf-8 -*-
+// ============================================================================
+// Project: Nemertea
+// File: vertex.hpp
+//
+// Part of the Nemertea Project
+// Territorial Expansion-Based Algorithm for the Hamiltonian Cycle Problem
+//
+// © 2021-Present Saulo Popov Zambiasi. All rights reserved.
+// Registered at INPI [BR512025005332-0].
+//
+// Licensed under the MIT License. See LICENSE file in the project root
+// for full license information.
+// ============================================================================
+// Description:
+// Declaration of the Vertex class, which represents a vertex in a graph and
+// its state transitions used by the Nemertea and NBFS algorithms.
+// ============================================================================
+
 #ifndef VERTEX_HPP_
 #define VERTEX_HPP_
 
@@ -55,7 +74,7 @@ std::string stateToString(State state);
  */
 class Vertex
 {
-  private:
+private:
     uint64_t id_;                     // Vertex id
     std::string name_;                // Vertex name or description
     double x_, y_;                    // Vertex position on 2D space
@@ -65,7 +84,7 @@ class Vertex
     uint64_t generation_;             // If the search_id_ in NBFS is equal,
                                       //    the vertex is currently being tested.
 
-  public:
+public:
     /**
      * Constructs a new Vertex with the given attributes.
      *
@@ -125,7 +144,6 @@ class Vertex
         parent_ = parent;
         generation_ = generation;
     }
-
 
     /**
      * Checks if this vertex is currently being tested in the NBFS algorithm.

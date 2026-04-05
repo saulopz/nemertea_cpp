@@ -1,3 +1,22 @@
+// -*- coding: utf-8 -*-
+// ============================================================================
+// Project: Nemertea
+// File: proboscis.hpp
+//
+// Part of the Nemertea Project
+// Territorial Expansion-Based Algorithm for the Hamiltonian Cycle Problem
+//
+// © 2021-Present Saulo Popov Zambiasi. All rights reserved.
+// Registered at INPI [BR512025005332-0].
+//
+// Licensed under the MIT License. See LICENSE file in the project root
+// for full license information.
+// ============================================================================
+// Description:
+// Declaration of the Proboscis class, which implements the Nemertea BFS
+// algorithm for finding the shortest path between two vertices in a graph.
+// ============================================================================
+
 #ifndef NBFS_HPP_
 #define NBFS_HPP_
 
@@ -51,11 +70,10 @@ private:
      * way back to the root vertex will be set as CONQUERED.
      * @param vertex The vertex from which to start the retraction.
      * @return The number of steps taken to retract back to the root vertex.
-     */    
+     */
     size_t Retract(Vertex *vertex) const;
 
 public:
-
     /**
      * Constructs a Proboscis object with the given graph. The root vertex is
      * initialized to nullptr, and the generation counter is initialized to 0.

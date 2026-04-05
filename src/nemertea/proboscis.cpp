@@ -1,3 +1,22 @@
+// -*- coding: utf-8 -*-
+// ============================================================================
+// Project: Nemertea
+// File: proboscis.cpp
+//
+// Part of the Nemertea Project
+// Territorial Expansion-Based Algorithm for the Hamiltonian Cycle Problem
+//
+// © 2021-Present Saulo Popov Zambiasi. All rights reserved.
+// Registered at INPI [BR512025005332-0].
+//
+// Licensed under the MIT License. See LICENSE file in the project root
+// for full license information.
+// ============================================================================
+// Description:
+// Implementation of the Proboscis class, which implements the Nemertea BFS
+// algorithm for finding the shortest path between two vertices in a graph.
+// ============================================================================
+
 #include "proboscis.hpp"
 #include "graph.hpp"
 #include "vertex.hpp"
@@ -32,10 +51,10 @@ size_t Proboscis::Evert(Vertex *startVertex, bool first, size_t depth)
             {
                 auto target = vertex->GetNeighbor(i);
                 auto [child, found] = Probe(vertex, target, first);
-                if (found)                  // If found
+                if (found)                 // If found
                     return Retract(child); // Found the goal
-                else if (child)             // If not found, but it is a valid vertex to follow
-                    leaves_.push(child);    // Put this vertex (node) in the tail
+                else if (child)            // If not found, but it is a valid vertex to follow
+                    leaves_.push(child);   // Put this vertex (node) in the tail
             }
         }
         level++; // Go to the next level of the tree
@@ -50,7 +69,7 @@ std::pair<Vertex *, bool> Proboscis::Probe(Vertex *vertex, Vertex *target, bool 
     const auto root_id = root_->GetId();
 
     // Case 1: Edge already active - ignore
-    if (graph_->GetConnectionState(vertex_id, target_id) == State::CONQUERED)
+    if (graph_->GetEdgeState(vertex_id, target_id) == State::CONQUERED)
         return {nullptr, false};
 
     if (target->GetState() != State::CONQUERED && target->IsTesting(generation_))
@@ -89,8 +108,7 @@ std::pair<Vertex *, bool> Proboscis::Probe(Vertex *vertex, Vertex *target, bool 
     if (target->GetState() == State::CONQUERED)
     {
         // Case 6: vertex is active and it's a root neighbor, than i found target
-        auto target_to_root = graph_->GetConnectionState(target_id, root_id);
-        if (target_to_root == State::CONQUERED)
+        if (graph_->GetEdgeState(target_id, root_id) == State::CONQUERED)
         {
             target->AddToGeneration(vertex, generation_);
             return {target, true};
@@ -111,8 +129,8 @@ size_t Proboscis::Retract(Vertex *vertex) const
     const auto vertex_id = vertex->GetId();
     const auto root_id = root_->GetId();
     if (vertex->GetState() == State::CONQUERED && vertex_id != root_id)
-        if (graph_->GetConnectionState(root_id, vertex_id) == State::CONQUERED)
-            graph_->SetConnectionState(root_id, vertex_id, State::INACTIVE);
+        if (graph_->GetEdgeState(root_id, vertex_id) == State::CONQUERED)
+            graph_->SetEdgeState(root_id, vertex_id, State::INACTIVE);
 
     // Returns to the root and activates the vertices and edges along the path.
     size_t new_vertex_count = 0;
@@ -128,7 +146,7 @@ size_t Proboscis::Retract(Vertex *vertex) const
         // Change connection to parent as ACTIVE
         if (auto parent = local->GetParent())
         {
-            graph_->SetConnectionState(local->GetId(), parent->GetId(), State::CONQUERED);
+            graph_->SetEdgeState(local->GetId(), parent->GetId(), State::CONQUERED);
             local = parent; // Go to parent
         }
         else

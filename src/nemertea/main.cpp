@@ -1,32 +1,38 @@
 // -*- coding: utf-8 -*-
-// main.cpp
+// ============================================================================
+// Project: Nemertea
+// File: main.cpp
 //
-// Nemertea: A Territorial Expansion-Based Algorithm for the Hamiltonian
-// Cycle Problem
+// Part of the Nemertea Project
+// Territorial Expansion-Based Algorithm for the Hamiltonian Cycle Problem
 //
 // © 2021-Present Saulo Popov Zambiasi. All rights reserved.
-// Since 10/10/2021.
-// Registered at INPI (Brazil) [BR512025005332-0].
-// Contact: saulopz@gmail.com
+// Registered at INPI [BR512025005332-0].
 //
-// This file is part of the Nemertea source code,
-// implementing the Vertex class used in the NBFS algorithm.
-//
+// Licensed under the MIT License. See LICENSE file in the project root
+// for full license information.
+// ============================================================================
 // Description:
+// Main entry point for the Nemertea algorithm. This file handles command-line
+// arguments, initializes the graph and Nemertea algorithm, and executes the
+// search for Hamiltonian cycles or paths. It also measures execution time and
+// outputs results.
 //
-// Nemertea is an algorithm for solving the Hamiltonian cycle problem in
-// graphs. It is a heuristic algorithm that uses territorial conquest as
-// a strategy. The algorithm starts in a random closed region and adds
-// new closed regions until all vertices are part of the boundaries of
-// that territory. To add new regions, a vertex v is taken from the
-// frontier and follows paths and external vertices of the frontier until
-// it finds a vertex u that is a neighbor of v and is on the frontier,
-// with no other vertices between them. The path taken from v to u through
-// the external area is added as a new frontier and the boundary that was
-// between v and u is undone. In this way, a new area is added to the
-// territory. To find this new region, the algorithm uses a custom Breadth
-// First Search.
-    
+// Nemertea is an algorithm for solving the Hamiltonian cycle problem in graphs.
+// It is a heuristic algorithm that uses territorial conquest as a strategy. The
+// algorithm starts in a random closed region and adds// new closed regions
+// until all vertices are part of the boundaries of that territory. To add new
+// regions, a vertex v is taken from the frontier and follows paths and external
+// vertices of the frontier until it finds a vertex u that is a neighbor of v and
+// is on the frontier, with no other vertices between them. The path taken from v
+// to u through the external area is added as a new frontier and the boundary that
+// was between v and u is undone. In this way, a new area is added to the territory.
+// To find this new region, the algorithm uses a custom Breadth First Search.
+//
+// This project starts at 10/10/2021 and is under development. The code is
+// available on GitHub at https://github.com/saulopz/nemertea_cpp.
+// ============================================================================
+
 #include "graph.hpp"
 #include "nemertea.hpp"
 #include <chrono>
@@ -78,7 +84,8 @@ int main(const int argc, char *argv[])
 
     if (fname == "")
     {
-        std::cout << "You need enter with a graph file.\n" << std::endl;
+        std::cout << "You need enter with a graph file.\n"
+                  << std::endl;
         std::cout << options.help() << "\n";
         return 1;
     }

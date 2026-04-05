@@ -1,3 +1,22 @@
+// -*- coding: utf-8 -*-
+// ============================================================================
+// Project: Nemertea
+// File: nemertea.hpp
+//
+// Part of the Nemertea Project
+// Territorial Expansion-Based Algorithm for the Hamiltonian Cycle Problem
+//
+// © 2021-Present Saulo Popov Zambiasi. All rights reserved.
+// Registered at INPI [BR512025005332-0].
+//
+// Licensed under the MIT License. See LICENSE file in the project root
+// for full license information.
+// ============================================================================
+// Description:
+// Declaration of the Nemertea class, which implements the Nemertea algorithm
+// for finding the hamiltonian cycle in a graph.
+// ============================================================================
+
 #ifndef NEMERTEA_HPP_
 #define NEMERTEA_HPP_
 

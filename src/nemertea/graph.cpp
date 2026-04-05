@@ -1,3 +1,26 @@
+// -*- coding: utf-8 -*-
+// ============================================================================
+// Project: Nemertea
+// File: graph.cpp
+//
+// Part of the Nemertea Project
+// Territorial Expansion-Based Algorithm for the Hamiltonian Cycle Problem
+//
+// © 2021-Present Saulo Popov Zambiasi. All rights reserved.
+// Registered at INPI [BR512025005332-0].
+//
+// Licensed under the MIT License. See LICENSE file in the project root
+// for full license information.
+// ============================================================================
+// Description:
+// Implementation of the Graph class, which represents a graph structure consisting
+// of vertices and edges, and provides methods for loading, saving, and managing
+// the graph. The Graph class uses an adjacency matrix to track the state of
+// connections between vertices, allowing for efficient updates and queries of
+// connection states. The class also includes functionality for random vertex
+// selection, which can be useful for various graph algorithms and operations.
+// ============================================================================
+
 #include "graph.hpp"
 #include <filesystem>
 #include <fstream>
@@ -64,7 +87,7 @@ void Graph::Load()
 
                 vertices_[a_id]->Connect(vertices_[b_id]);
                 vertices_[b_id]->Connect(vertices_[a_id]);
-                SetAdjacent(a_id, b_id);
+                SetEdgeState(a_id, b_id, State::INACTIVE);
             }
         }
     }

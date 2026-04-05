@@ -1,3 +1,22 @@
+// -*- coding: utf-8 -*-
+// ============================================================================
+// Project: Nemertea
+// File: nemertea.cpp
+//
+// Part of the Nemertea Project
+// Territorial Expansion-Based Algorithm for the Hamiltonian Cycle Problem
+//
+// © 2021-Present Saulo Popov Zambiasi. All rights reserved.
+// Registered at INPI [BR512025005332-0].
+//
+// Licensed under the MIT License. See LICENSE file in the project root
+// for full license information.
+// ============================================================================
+// Description:
+// Implementation of the Nemertea class, which implements the Nemertea algorithm
+// for finding the hamiltonian cycle in a graph.
+// ============================================================================
+
 #include "nemertea.hpp"
 #include "proboscis.hpp"
 
@@ -51,7 +70,7 @@ Vertex *Nemertea::Spot(const Vertex *prev, const Vertex *current) const
     for (size_t i = 0; i < neighbor_count; i++)
     {
         auto neighbor = current->GetNeighbor(i);
-        if (graph_->GetConnectionState(current->GetId(), neighbor->GetId()) == State::CONQUERED)
+        if (graph_->GetEdgeState(current->GetId(), neighbor->GetId()) == State::CONQUERED)
         {
             if (!prev || neighbor->GetId() != prev->GetId())
                 return neighbor;
@@ -75,7 +94,7 @@ size_t Nemertea::FirstPath(Vertex *root) const
             auto neighbor = vertex->GetNeighbor(i);
             if (neighbor->GetState() != State::CONQUERED)
             {
-                graph_->SetConnectionState(vertex->GetId(), neighbor->GetId(), State::CONQUERED);
+                graph_->SetEdgeState(vertex->GetId(), neighbor->GetId(), State::CONQUERED);
                 neighbor->SetState(State::CONQUERED);
                 count++;
                 vertex = neighbor;
