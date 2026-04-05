@@ -29,7 +29,6 @@
 #include <cstdint>
 #include <random>
 #include <vector>
-#include <iostream>
 
 /**
  * Represents a graph structure consisting of vertices and edges (G=(V,E)).
@@ -52,7 +51,7 @@
  */
 class Graph
 {
-private:
+  private:
     std::string filename_;           // File name of graph
     std::vector<Vertex *> vertices_; // List of vertices
     std::vector<State> adj_;         // Adjacency matrix to track connection states
@@ -62,7 +61,7 @@ private:
     std::mt19937 random_engine_{std::random_device{}()};
     std::uniform_int_distribution<size_t> index_distribution_;
 
-public:
+  public:
     /**
      * Constructs a new Graph object with the specified filename. The graph will
      * be loaded from the file when the Load() method is called. The constructor
