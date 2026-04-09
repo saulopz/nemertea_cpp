@@ -44,7 +44,7 @@ static std::vector<int> warnsdorff_try(const Graph &g, int start_id)
     auto mark = [&](int id) { visited[g.id_to_idx.at(id)] = true; };
     auto is_visited = [&](int id) -> bool { return visited[g.id_to_idx.at(id)]; };
 
-    // Conta vizinhos não visitados de um vértice
+    // Counts unvisited neighbors of a vertex.
     auto unvisited_degree = [&](int id) -> int {
         int deg = 0;
         auto it = g.adj.find(id);
@@ -90,7 +90,7 @@ static std::vector<int> warnsdorff_try(const Graph &g, int start_id)
         cur = best_id;
     }
 
-    // Tenta fechar o ciclo
+    // Try to close the cycle.
     for (int nb : g.adj.at(cur))
         if (nb == start_id)
         {
@@ -109,14 +109,14 @@ int main(int argc, char *argv[])
 {
     if (argc < 3)
     {
-        std::cerr << "Usage: warnsdorff <graph.json> <output.dot>\n";
+        std::cerr << "Uses: warnsdorff <grafo.json> <saida.dot>\n";
         return 1;
     }
 
     std::string in_path = argv[1];
     std::string out_path = argv[2];
 
-    // ── Load (not timed) ─────────────────────────────────────────────────────
+    // ── Load (não cronometrado) ───────────────────────────────────────────────
     Graph g;
     try
     {
@@ -129,7 +129,7 @@ int main(int argc, char *argv[])
     }
 
     int n = static_cast<int>(g.vertices.size());
-    std::cout << "Graph: " << n << " vertices, " << g.edges.size() << " edges\n";
+    std::cout << "Graph: " << n << " vrtices, " << g.edges.size() << " edges\n";
 
     // ── Algorithm (timed) ──────────────────────────────────────────────
     //
@@ -171,7 +171,7 @@ int main(int argc, char *argv[])
         std::cout << "Time: " << elapsed_us << " µs\n";
     }
 
-    // ── Save DOT (not timed) ─────────────────────────────────────────
+    // ── Gravar DOT (não cronometrado) ─────────────────────────────────────────
     try
     {
         write_dot(out_path, in_path, "Warnsdorff", g, elapsed_us, result);

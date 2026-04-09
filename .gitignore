@@ -10,7 +10,7 @@ results/*.dot
 # Binários e executáveis
 build/
 backup/
-docs/
+doc/
 
 # Arquivos temporários de sistema
 .DS_Store

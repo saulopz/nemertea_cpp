@@ -176,22 +176,22 @@ int main(int argc, char* argv[])
 
     // ── Result ─────────────────────────────────────────────────────────────
     if (!bt.result.empty()) {
-        std::cout << "Ciclo hamiltoniano ENCONTRADO\n";
-        std::cout << "Tempo: " << elapsed_us << " µs\n";
+        std::cout << "Hamiltonian cycle FOUND\n";
+        std::cout << "Time: " << elapsed_us << " µs\n";
     } else if (timed_out.load()) {
         std::cout << "TIMEOUT após " << timeout_s << " s\n";
     } else {
-        std::cout << "Nenhum ciclo hamiltoniano encontrado\n";
-        std::cout << "Tempo: " << elapsed_us << " µs\n";
+        std::cout << "No Hamiltonian cycle found.\n";
+        std::cout << "Time: " << elapsed_us << " µs\n";
     }
 
     // ── Save DOT (not timed) ───────────────────────────────────────────────
     try {
         write_dot(out_path, in_path, "Backtracking (DFS + Warnsdorff order)",
                   g, elapsed_us, bt.result);
-        std::cout << "DOT gravado em: " << out_path << "\n";
+        std::cout << "DOT recorded in: " << out_path << "\n";
     } catch (const std::exception& ex) {
-        std::cerr << "Erro ao gravar DOT: " << ex.what() << "\n";
+        std::cerr << "Error recording DOT: " << ex.what() << "\n";
         return 1;
     }
 

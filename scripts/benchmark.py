@@ -27,16 +27,18 @@ ALGOS = [
 def parse_output(stdout):
     match_us = re.search(r"(\d+)\s+microseconds", stdout)
     if not match_us:
-        match_us = re.search(r"Tempo:\s*(\d+)", stdout)
+        match_us = re.search(r"Time:\s*(\d+)", stdout)
 
     us = int(match_us.group(1)) if match_us else -1
 
     status = "ERROR"
-    if "=> SOLVED" in stdout or "ENCONTRADO" in stdout:
+    if "=> SOLVED" in stdout or "FOUND" in stdout:
         status = "FOUND"
     elif "=> INCONCLUSIVE" in stdout:
         status = "INCONCLUSIVE"
-    elif "Nenhum ciclo" in stdout or "NOT FOUND" in stdout or "Found 0" in stdout:
+    elif (
+        "No Hamiltonian cycle" in stdout or "NOT FOUND" in stdout or "Found 0" in stdout
+    ):
         status = "NOT_FOUND"
     elif "TIMEOUT" in stdout:
         status = "TIMEOUT"
