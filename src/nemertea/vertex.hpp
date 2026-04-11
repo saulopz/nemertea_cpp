@@ -30,12 +30,11 @@
  * - NONE: Inactive vertex
  * - CONQUERED: It's part of Nemertea frontear
  *
- * And Edges is represented as a array V x V to a bidimensional matrix of
- * adjacense of vertices conection. It has tree states possible:
+ * And Edges is represented as a array V x V to a bidimensional matrix
+ * of adjacense of vertices conection. It has tree states possible:
  * - NONE: Not connected
  * - CONQUERED: It's part of Nemertea frontear
- * - INACTIVE: It's connected but not on Nemertea
- *             frontear
+ * - INACTIVE: It's connected but not on Nemertea frontear
  */
 enum class State
 {

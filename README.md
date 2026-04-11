@@ -20,6 +20,7 @@ This repository contains a unified environment to provide a comprehensive perfor
 | **C++ Compiler** | C++23 | GCC 13+, Clang 15+, or MSVC 2022 |
 | **Python** | 3.8+ | Required for the **benchmark suite** |
 | **Git** | any | To fetch `nlohmann/json` automatically |
+| **samply** | any | Optional — for CPU profiling ([install](https://github.com/mstange/samply)) |
 
 ## 🚀 Build Instructions
 
@@ -53,6 +54,51 @@ python3 scripts/benchmark.py <runs> <timeout_in_seconds>
 - **Terminal**: Real-time progress with status (`FOUND`, `NOT_FOUND`, `TIMEOUT`, `INCONCLUSIVE`).
 - **CSV**: Detailed logs saved in `results/benchmark_TIMESTAMP.csv`.
 - **DOT**: Generated cycles are saved in `results/dot_TIMESTAMP/` for visualization.
+
+## 🔬 Profiling
+
+CPU profiling via [samply](https://github.com/mstange/samply), which records stack samples and opens them in the [Firefox Profiler](https://profiler.firefox.com/) for interactive flame graphs and call trees. Works on **macOS, Linux, and Windows**.
+
+### Prerequisites
+
+Install **samply** from [github.com/mstange/samply](https://github.com/mstange/samply):
+
+```bash
+# macOS (Homebrew)
+brew install samply
+
+# Linux / macOS (via Cargo — requires Rust toolchain)
+cargo install --locked samply
+
+# Windows (PowerShell)
+powershell -c "irm https://github.com/mstange/samply/releases/download/samply-v0.13.1/samply-installer.ps1 | iex"
+```
+
+On **Linux**, you may also need to allow unprivileged perf events:
+```bash
+echo 1 | sudo tee /proc/sys/kernel/perf_event_paranoid
+```
+
+### Running the Profiler
+
+```bash
+make profile <algo> <graph>
+```
+
+This builds with profiling flags, records a CPU profile, and opens it in Firefox.
+
+**Examples:**
+```bash
+make profile nemertea frucht
+make profile backtracking att48_tsp
+make profile warnsdorff petersen
+```
+
+Press **Ctrl+C** to stop the symbol server when done.
+
+### What to Look For
+- **Call Tree**: See which functions consume the most CPU time
+- **Flame Graph**: Visualize the full call stack depth and width
 
 ## 📂 Input & Data Format
 
@@ -88,7 +134,7 @@ If you wish to run a single test manually:
 
 ## 📜 License & Scientific Attribution
 
-This project is licensed under the MIT License — see the LICENSE file for details.
+This project is licensed under the MIT License. See the LICENSE file for details.
 
 Scientific Integrity & Intellectual Property:
 
@@ -99,3 +145,12 @@ Scientific Integrity & Intellectual Property:
 **Contact:** **Saulo Popov Zambiasi** (saulopz@gmail.com)
 
 Professor and Researcher
+
+## Acknowledgments (GitHub Version)
+
+I would like to thank **[Nassor Frazier-Silva](https://github.com/nassor)** for his invaluable contribution to this project, specifically for:
+
+- Refining the `CMakeLists.txt` for macOS compatibility.
+- Implementing the profiling scripts for performance and CPU consumption analysis, along with the corresponding tutorial in the `README.md`.
+
+This collaboration was essential for ensuring the technical robustness of the implementation across different environments.
