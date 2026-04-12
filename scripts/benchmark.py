@@ -13,6 +13,8 @@ TIMEOUT_S = int(sys.argv[2]) if len(sys.argv) > 2 else 60
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 BUILD_DIR = BASE_DIR / "build" / "bin"
+if not (BUILD_DIR / "nemertea").exists() and not (BUILD_DIR / "nemertea.exe").exists():
+    BUILD_DIR = BASE_DIR / "build" / "bin" / "Release"
 GRAPH_DIR = BASE_DIR / "graphs"
 RESULTS_DIR = BASE_DIR / "results"
 TIMESTAMP = datetime.now().strftime("%Y%m%d_%H%M%S")
