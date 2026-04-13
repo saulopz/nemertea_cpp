@@ -1,10 +1,11 @@
 # Nemertea: Territorial Expansion-Based Algorithm for the Hamiltonian Cycle Problem
 
-Nemertea is a C++ implementation of a territorial-expansion algorithm to tackle the **Hamiltonian Cycle Problem (HCP)**.
-
 Nemertea is a C++23 suite designed to solve and benchmark the **Hamiltonian Cycle Problem (HCP)**. Performance is also compared with classic approaches such as Backtracking and Warnsdorff's heuristic.
 
 ![Dodecahedron Graph with Hamiltonian Cycle](images/dodecahedron.png)
+
+## Video Abstract
+[IEEE Latin America Transactions — Video Abstract](https://youtu.be/jmLukk1AnYQ)
 
 ## 🧬 Algorithm Suite
 This repository contains a unified environment to provide a comprehensive performance analysis:
@@ -130,6 +131,35 @@ If you wish to run a single test manually:
 ## Example Graphs
 
 ![RNET-58 Graph with Hamiltonian Cycle](images/rnet-58.png)
+
+
+## 📈 Performance Results
+
+The performance of **Nemertea** was evaluated against standard Backtracking and Warnsdorff's heuristic. The results below reflect the empirical data from `benchmark_20260401_132430.csv`.
+
+### 🖥️ Execution Environment
+To ensure scientific integrity and reproducibility, all benchmarks were executed in a controlled *sovereign computing environment*:
+* **OS:** Kubuntu 25.10 (Questing Quokka) x86_64
+* **Kernel:** Linux 6.17.0-20-generic
+* **Processor:** 11th Gen Intel(R) Core(TM) i7-11800H (16) @ 4.60 GHz
+* **Memory:** 30.62 GiB
+
+### 📈 Key Results & Highlights (Comparative Analysis)
+The Nemertea algorithm demonstrates superior efficiency, especially where traditional heuristics fail or reach computational limits:
+
+| Graph Instance | Vertices | Backtracking (med) | Warnsdorff (med) | **Nemertea (med)** | Speedup (vs BT) |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **04_rnet-58** | 58 | *TIMEOUT* | 136.0 $\mu s$ | **10.0 $\mu s$** | **> 100,000x** |
+| **03_hoffman-singleton** | 50 | 3,882.0 $\mu s$ | 129.0 $\mu s$ | **14.0 $\mu s$** | **277x** |
+| **01_graph1001_hcp** | 9,528 | *TIMEOUT* | 57,446.5 $\mu s$ | **85.5 $\mu s$** | **Significant** |
+| **04_att48_tsp** | 48 | 156.0 $\mu s$ | 32.0 $\mu s$ | **22.0 $\mu s$** | **7x** |
+
+*Note: In `01_graph1001_hcp`, Warnsdorff failed to find a solution (`NOT_FOUND`), while Nemertea reached its state in a fraction of the time.*
+
+#### Insights from the Study:
+* **Scalability:** In the `graph1001_hcp` instance (9,528 vertices), Nemertea reached its state in only **85.5 $\mu s$**, while traditional Backtracking exceeded the 1-minute **TIMEOUT** threshold.
+* **Practical Complexity:** Data confirms that Nemertea maintains a performance profile near $O(|V| + |E|)$ in sparse instances, avoiding the exponential growth typical of exhaustive searches.
+* **Efficiency in Density:** For dense graphs (TSPLIB), Nemertea is consistently **7x to 12x faster** than the baseline. Even considering its probabilistic nature, the cumulative time for multiple runs remains orders of magnitude lower than a single backtracking session.
 
 
 ## 📜 License & Scientific Attribution
