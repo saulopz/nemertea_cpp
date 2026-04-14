@@ -168,7 +168,7 @@ This project is licensed under the MIT License. See the LICENSE file for details
 
 Scientific Integrity & Intellectual Property:
 
-- Algorithm Registration: The Nemertea algorithm and its implementation are officially registered with the Brazilian National Institute of Industrial Property (INPI) under registration numbers BR512025005332-0 (v1.0) and \texttt{BR512026002289-4} (v1.1).
+- Algorithm Registration: The Nemertea algorithm and its implementation are officially registered with the Brazilian National Institute of Industrial Property (INPI) under registration numbers BR512025005332-0 (v1.0) and BR512026002289-4 (v1.1).
 - Peer-Review Status: This repository provides the source code and benchmarking suite associated with a manuscript currently under review at IEEE Latin America Transactions.
 - Citation: If you use this software for research purposes, please cite the associated work (citation details will be updated upon final publication).
 
