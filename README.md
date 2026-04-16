@@ -4,9 +4,6 @@ Nemertea is a C++23 suite designed to solve and benchmark the **Hamiltonian Cycl
 
 ![Dodecahedron Graph with Hamiltonian Cycle](images/dodecahedron.png)
 
-## Video Abstract
-[IEEE Latin America Transactions — Video Abstract](https://youtu.be/jmLukk1AnYQ)
-
 ## 🧬 Algorithm Suite
 This repository contains a unified environment to provide a comprehensive performance analysis:
 - **Nemertea**: The proposed territorial expansion algorithm (High-performance BFS-based).
