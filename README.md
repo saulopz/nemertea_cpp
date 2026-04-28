@@ -144,14 +144,16 @@ To ensure scientific integrity and reproducibility, all benchmarks were executed
 ### 📈 Key Results & Highlights (Comparative Analysis)
 The Nemertea algorithm demonstrates superior efficiency, especially where traditional heuristics fail or reach computational limits:
 
-| Graph Instance | Vertices | Backtracking (med) | Warnsdorff (med) | **Nemertea (med)** | Speedup (vs BT) |
-| :--- | :---: | :---: | :---: | :---: | :---: |
-| **04_rnet-58** | 58 | *TIMEOUT* | 136.0 $\mu s$ | **10.0 $\mu s$** | **> 100,000x** |
-| **03_hoffman-singleton** | 50 | 3,882.0 $\mu s$ | 129.0 $\mu s$ | **14.0 $\mu s$** | **277x** |
-| **01_graph1001_hcp** | 9,528 | *TIMEOUT* | 57,446.5 $\mu s$ | **85.5 $\mu s$** | **Significant** |
-| **04_att48_tsp** | 48 | 156.0 $\mu s$ | 32.0 $\mu s$ | **22.0 $\mu s$** | **7x** |
+| Graph Instance        | Vertices | Backtracking (med) | Warnsdorff (med) | **Nemertea (med)** |
+| :---                  | :---:    | :---:              | :---:            | :---:              |
+| **hoffman-singleton** | 50       | 3,882.0 $\mu s$    | 98.0 $\mu s$     | **14.0 $\mu s$**   |
+| **watkins-snark**     | 50       | *TIMEOUT*          | 85.0 $\mu s$     | **4.0 $\mu s$**   |
+| **graph1001_hcp**     | 9,528    | *TIMEOUT*          | 57,446.5 $\mu s$ | **85.5 $\mu s$**   |
+| **att48_tsp**         | 48       | 156.0 $\mu s$      | 141.0 $\mu s$    | **22.0 $\mu s$**   |
+| **berlin52_tsp**      | 52       | 323.0 $\mu s$      | 374.5 $\mu s$    | **25.0 $\mu s$**   |
+| **rnet-58**           | 58       | *TIMEOUT*          | 219.0 $\mu s$    | **10.0 $\mu s$**   |
 
-*Note: In `01_graph1001_hcp`, Warnsdorff failed to find a solution (`NOT_FOUND`), while Nemertea reached its state in a fraction of the time.*
+*Note: In `graph1001_hcp`, Warnsdorff failed to find a solution (`NOT_FOUND`), while Nemertea reached its state in a fraction of the time.*
 
 #### Insights from the Study:
 * **Scalability:** In the `graph1001_hcp` instance (9,528 vertices), Nemertea reached its state in only **85.5 $\mu s$**, while traditional Backtracking exceeded the 1-minute **TIMEOUT** threshold.

@@ -47,9 +47,9 @@ size_t Proboscis::Evert(Vertex *startVertex, bool first, size_t depth)
             leaves_.pop();                 // Remove from queue
 
             auto neighbor_count = vertex->GetNeighborsCount();
-            for (size_t i = 0; i < neighbor_count; i++) // While has a possible neighbord
+            for (size_t j = 0; j < neighbor_count; j++) // While has a possible neighbord
             {
-                auto target = vertex->GetNeighbor(i);
+                auto target = vertex->GetNeighbor(j);
                 auto [child, found] = Probe(vertex, target, first);
                 if (found)                 // If found
                     return Retract(child); // Found the goal
@@ -68,7 +68,7 @@ std::pair<Vertex *, bool> Proboscis::Probe(Vertex *vertex, Vertex *target, bool 
     const auto target_id = target->GetId();
     const auto root_id = root_->GetId();
 
-    // Case 1: Edge already active - ignore
+    // Case 1: Edge already active, ignore
     if (graph_->GetEdgeState(vertex_id, target_id) == State::CONQUERED)
         return {nullptr, false};
 
@@ -107,7 +107,7 @@ std::pair<Vertex *, bool> Proboscis::Probe(Vertex *vertex, Vertex *target, bool 
     // Case 6 and 7: If vertex is active and is neighbor of root, path found or ignored
     if (target->GetState() == State::CONQUERED)
     {
-        // Case 6: vertex is active and it's a root neighbor, than i found target
+        // Case 6: vertex is ACTIVE and it's a root neighbor, than i found target
         if (graph_->GetEdgeState(target_id, root_id) == State::CONQUERED)
         {
             target->AddToGeneration(vertex, generation_);
