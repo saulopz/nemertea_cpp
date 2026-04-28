@@ -44,7 +44,7 @@ size_t Proboscis::Evert(Vertex *startVertex, bool first, size_t depth)
         for (size_t i = 0; i < nodes_at_this_level; i++)
         {
             auto vertex = leaves_.front(); // Get the vertex from de head of leaves
-            leaves_.pop();                 // Remove from queue
+            leaves_.pop();                 // Remove a vertex from queue
 
             auto neighbor_count = vertex->GetNeighborsCount();
             for (size_t j = 0; j < neighbor_count; j++) // While has a possible neighbord

@@ -147,7 +147,7 @@ The Nemertea algorithm demonstrates superior efficiency, especially where tradit
 | Graph Instance        | Vertices | Backtracking (med) | Warnsdorff (med) | **Nemertea (med)** |
 | :---                  | :---:    | :---:              | :---:            | :---:              |
 | **hoffman-singleton** | 50       | 3,882.0 $\mu s$    | 98.0 $\mu s$     | **14.0 $\mu s$**   |
-| **watkins-snark**     | 50       | *TIMEOUT*          | 85.0 $\mu s$     | **4.0 $\mu s$**   |
+| **watkins-snark**     | 50       | *TIMEOUT*          | 85.0 $\mu s$     | **4.0 $\mu s$**    |
 | **graph1001_hcp**     | 9,528    | *TIMEOUT*          | 57,446.5 $\mu s$ | **85.5 $\mu s$**   |
 | **att48_tsp**         | 48       | 156.0 $\mu s$      | 141.0 $\mu s$    | **22.0 $\mu s$**   |
 | **berlin52_tsp**      | 52       | 323.0 $\mu s$      | 374.5 $\mu s$    | **25.0 $\mu s$**   |
