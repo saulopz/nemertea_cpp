@@ -17,8 +17,8 @@
 // algorithm for finding the shortest path between two vertices in a graph.
 // ============================================================================
 
-#ifndef NBFS_HPP_
-#define NBFS_HPP_
+#ifndef PROBOSCIS_HPP_
+#define PROBOSCIS_HPP_
 
 #include "graph.hpp"
 #include <cstddef>
@@ -92,4 +92,4 @@ public:
     size_t Evert(Vertex *startVertex, bool first, size_t depth);
 };
 
-#endif // NBFS_HPP_
+#endif // PROBOSCIS_HPP_
