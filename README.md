@@ -4,6 +4,12 @@ Nemertea is a C++23 suite designed to solve and benchmark the **Hamiltonian Cycl
 
 ![Dodecahedron Graph with Hamiltonian Cycle](images/dodecahedron.png)
 
+## 🎬 Video Demonstration
+
+Step-by-step demonstration of the territorial expansion:
+
+[![Nemertea video demonstration](https://img.youtube.com/vi/GToI_rJK-S8/hqdefault.jpg)](https://www.youtube.com/watch?v=GToI_rJK-S8)
+
 ## 🧬 Algorithm Suite
 This repository contains a unified environment to provide a comprehensive performance analysis:
 - **Nemertea**: The proposed territorial expansion algorithm (High-performance BFS-based).
@@ -167,9 +173,9 @@ This project is licensed under the MIT License. See the LICENSE file for details
 
 Scientific Integrity & Intellectual Property:
 
-- Algorithm Registration: The Nemertea algorithm and its implementation are officially registered with the Brazilian National Institute of Industrial Property (INPI) under registration numbers BR512025005332-0 (v1.0) and BR512026002289-4 (v1.1).
-- Peer-Review Status: This repository provides the source code and benchmarking suite associated with a manuscript currently under review at IEEE Latin America Transactions.
-- Citation: If you use this software for research purposes, please cite the associated work (citation details will be updated upon final publication).
+- **Algorithm Registration:** The Nemertea algorithm and its implementation are officially registered with the Brazilian National Institute of Industrial Property (INPI) under registration numbers BR512025005332-0 (v1.0) and BR512026002289-4 (v1.1).
+- **Peer-Review Status:** This repository provides the source code and benchmarking suite associated with the manuscript accepted for publication in *Revista de Informática Teórica e Aplicada* (RITA).
+- **Citation:** If you use this software for research purposes, please cite the associated work (citation details will be updated upon final publication).
 
 **Contact:** **Saulo Popov Zambiasi** (saulopz@gmail.com)
 
